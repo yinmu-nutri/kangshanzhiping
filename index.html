@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="面向基层养老驿站与康养护理人员的轻量化营养筛查辅助工具。纯本地运行，无需联网。">
+<title>康膳智评 · 轻量化营养筛查辅助工具</title>
+<style>
+/* =========================================================
+   康膳智评 - 全局样式
+   主色：医疗蓝 #2c7fb8 / 浅绿 #4caf50 / 浅灰背景 #f5f7fa
+   ========================================================= */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --primary: #2c7fb8;
+  --primary-dark: #1f5f8e;
+  --accent: #4caf50;
+  --accent-dark: #388e3c;
+  --bg: #f5f7fa;
+  --card: #ffffff;
+  --text: #2d3436;
+  --text-light: #636e72;
+  --border: #e0e4e8;
+  --ok: #2e7d32;
+  --warn: #e65100;
+  --bad: #c62828;
+  --radius: 8px;
+  --shadow: 0 2px 8px rgba(44, 62, 80, .08);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+/* ===== 顶部导航栏 ===== */
+.nav-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 20px;
+  min-height: 60px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.04);
+}
+.brand {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--primary);
+  white-space: nowrap;
+}
+.brand small { font-size: 11px; color: var(--text-light); font-weight: 400; margin-left: 6px; }
+.nav-links { display: flex; flex-wrap: wrap; gap: 4px; margin-left: auto; }
+.nav-link {
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 15px;
+  color: var(--text-light);
+  padding: 10px 14px;
+  min-height: 44px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background .15s, color .15s;
+}
+.nav-link:hover { background: #eef4f9; color: var(--primary-dark); }
+.nav-link.active { background: var(--primary); color: #fff; font-weight: 600; }
+
+/* ===== 主内容容器 ===== */
+main { max-width: 980px; margin: 0 auto; padding: 24px 20px 40px; }
+
+/* 视图切换：仅显示当前模块，配合淡入 */
+.view { display: none; }
+.view.active { display: block; animation: fadeIn .3s ease; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== 卡片 ===== */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+  margin-bottom: 20px;
+}
+.card h2 {
+  color: var(--primary-dark);
+  font-size: 22px;
+  margin-bottom: 6px;
+}
+.card h3 {
+  color: var(--primary-dark);
+  font-size: 17px;
+  margin: 18px 0 10px;
+}
+.subtitle { color: var(--text-light); font-size: 14px; margin-bottom: 16px; }
+
+/* ===== 首页 ===== */
+.hero {
+  background: linear-gradient(135deg, var(--primary) 0%, #4a90c4 100%);
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 36px 28px;
+  margin-bottom: 24px;
+}
+.hero h1 { font-size: 30px; margin-bottom: 8px; }
+.hero p { font-size: 15px; opacity: .92; }
+.feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.feature-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 26px 22px;
+  cursor: pointer;
+  text-align: center;
+  transition: transform .15s, box-shadow .15s, border-color .15s;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.feature-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--primary);
+  box-shadow: 0 6px 16px rgba(44,127,184,.18);
+}
+.feature-card .icon {
+  font-size: 34px;
+  margin-bottom: 10px;
+}
+.feature-card .ftitle { font-size: 18px; font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
+.feature-card .fdesc { font-size: 13px; color: var(--text-light); }
+
+/* ===== 表单 ===== */
+.form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+.form-field { display: flex; flex-direction: column; gap: 6px; }
+.form-field label, .form-field .lbl { font-size: 14px; font-weight: 600; color: var(--text); }
+.form-field .hint { font-size: 12px; color: var(--text-light); font-weight: 400; }
+input[type="text"], input[type="number"], select {
+  width: 100%;
+  font: inherit;
+  font-size: 16px;
+  padding: 10px 12px;
+  min-height: 44px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: #fff;
+  color: var(--text);
+  outline: none;
+  transition: border-color .15s;
+}
+input:focus, select:focus { border-color: var(--primary); }
+
+/* 单选选项行 */
+.q-group { margin: 12px 0; }
+.q-title { font-size: 15px; font-weight: 600; margin-bottom: 8px; color: var(--text); }
+.q-opt label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 14px;
+  margin-bottom: 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: #fff;
+  cursor: pointer;
+  font-size: 15px;
+  min-height: 44px;
+  transition: border-color .15s, background .15s;
+}
+.q-opt label:hover { border-color: var(--primary); }
+.q-opt label.sel { border-color: var(--primary); background: #eef6fb; font-weight: 600; }
+.q-opt input[type="radio"] { width: 18px; height: 18px; accent-color: var(--primary); flex: none; }
+
+/* 分段选择按钮（人群切换） */
+.seg { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+.seg input { position: absolute; opacity: 0; pointer-events: none; }
+.seg label {
+  flex: 1 1 150px;
+  text-align: center;
+  padding: 12px 10px;
+  min-height: 44px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: #fff;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-light);
+  transition: all .15s;
+}
+.seg label:hover { border-color: var(--primary); }
+.seg label.sel { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+/* 隐藏的次级表单容器（随人群切换显隐） */
+.sub-form { display: none; }
+.sub-form.show { display: block; }
+
+/* ===== 按钮 ===== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  min-height: 48px;
+  padding: 0 26px;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--primary);
+  color: #fff;
+  cursor: pointer;
+  transition: background .15s;
+}
+.btn:hover { background: var(--primary-dark); }
+.btn-green { background: var(--accent); }
+.btn-green:hover { background: var(--accent-dark); }
+.btn-outline { background: #fff; color: var(--primary-dark); border: 1px solid var(--primary); }
+.btn-outline:hover { background: #eef6fb; }
+.btn-block { width: 100%; margin-top: 20px; }
+.btn + .btn { margin-left: 10px; }
+.btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+.btn-row .btn { margin: 0; }
+
+/* ===== 结果展示 ===== */
+.result {
+  display: none;
+  margin-top: 22px;
+  padding: 18px 20px;
+  border-radius: var(--radius);
+  border-left: 6px solid var(--primary);
+  background: #f8fbfe;
+}
+.result.show { display: block; animation: fadeIn .3s ease; }
+.result.bad  { border-left-color: var(--bad);  background: #fdf3f3; }
+.result.warn { border-left-color: var(--warn); background: #fef7f0; }
+.result.ok   { border-left-color: var(--accent); background: #f2faf2; }
+.result h4 { font-size: 18px; margin-bottom: 8px; }
+.result.bad h4 { color: var(--bad); }
+.result.warn h4 { color: var(--warn); }
+.result.ok h4 { color: var(--ok); }
+.result .num { font-size: 26px; font-weight: 800; }
+.result ul, .result ol { padding-left: 20px; margin: 6px 0; }
+.result p { margin: 4px 0; }
+.kv { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin: 12px 0; }
+.kv-item {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  text-align: center;
+}
+.kv-item .k { font-size: 12px; color: var(--text-light); }
+.kv-item .v { font-size: 18px; font-weight: 700; color: var(--primary-dark); margin-top: 2px; }
+
+/* ===== 折叠面板（专业依据） ===== */
+details.panel {
+  margin-top: 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: #fff;
+  overflow: hidden;
+}
+details.panel summary {
+  cursor: pointer;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--primary-dark);
+  background: #f0f6fb;
+  user-select: none;
+}
+details.panel summary:hover { background: #e5f0f8; }
+details.panel .panel-body { padding: 12px 16px; font-size: 13px; color: var(--text); }
+
+/* ===== 膳食方案（三餐列表） ===== */
+.meal { margin-top: 16px; }
+.meal .meal-item {
+  display: flex;
+  gap: 12px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 15px;
+}
+.meal .meal-item .time {
+  flex: none;
+  width: 74px;
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+.meal .meal-item .food { color: var(--text); }
+.note-box {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  background: #f0f6fb;
+  border: 1px dashed var(--primary);
+  font-size: 14px;
+}
+.note-box li { margin-left: 18px; }
+
+/* ===== 报告区（打印） ===== */
+#report-wrap { margin-top: 10px; }
+#report {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+}
+#report .report-head {
+  border-bottom: 2px solid var(--primary);
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+}
+#report .report-head h3 { color: var(--primary-dark); font-size: 22px; margin: 0; }
+#report .report-meta { display: flex; gap: 20px; flex-wrap: wrap; font-size: 14px; color: var(--text-light); margin-top: 4px; }
+#report .report-section { margin-top: 16px; }
+#report .report-section h4 { color: var(--primary-dark); border-left: 4px solid var(--primary); padding-left: 8px; font-size: 16px; margin-bottom: 8px; }
+#report table.summary { width: 100%; border-collapse: collapse; font-size: 14px; }
+#report table.summary td, #report table.summary th { border: 1px solid var(--border); padding: 8px 10px; text-align: left; }
+#report table.summary th { background: #f0f6fb; width: 30%; }
+.disclaimer {
+  margin-top: 16px;
+  font-size: 12px;
+  color: var(--text-light);
+  padding: 10px 12px;
+  border-top: 1px solid var(--border);
+}
+
+/* ===== 页脚免责声明 ===== */
+footer.foot {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 16px 20px 32px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-light);
+  border-top: 1px solid var(--border);
+}
+
+/* ===== 响应式：平板 768px ===== */
+@media (max-width: 768px) {
+  .brand small { display: none; }
+  .nav-bar { padding: 0 12px; gap: 8px; flex-wrap: wrap; }
+  .nav-links { margin-left: 0; width: 100%; justify-content: space-between; }
+  .nav-link { flex: 1 1 auto; text-align: center; padding: 10px 6px; font-size: 14px; }
+  .feature-grid { grid-template-columns: 1fr; }
+  .form-grid { grid-template-columns: 1fr; }
+  main { padding: 16px 12px 32px; }
+  .hero { padding: 24px 18px; }
+  .hero h1 { font-size: 24px; }
+}
+
+/* ===== 打印：仅显示报告 ===== */
+@media print {
+  body { background: #fff; }
+  .nav-bar, .view-home, .view-mna, .view-calc, .view-help, footer.foot,
+  #diet-controls { display: none !important; }
+  .view-diet { display: block !important; }
+  main { max-width: 100%; padding: 0; }
+  .card { border: none; box-shadow: none; padding: 0; margin: 0; }
+  #report { border: none; padding: 0; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== 顶部导航栏 ===== -->
+<header class="nav-bar">
+  <div class="brand">康膳智评<small>营养筛查辅助工具</small></div>
+  <nav class="nav-links" aria-label="主导航">
+    <button class="nav-link active" data-view="home" type="button">首页</button>
+    <button class="nav-link" data-view="mna" type="button">MNA-SF 筛查</button>
+    <button class="nav-link" data-view="calc" type="button">分人群测算</button>
+    <button class="nav-link" data-view="diet" type="button">膳食方案</button>
+    <button class="nav-link" data-view="help" type="button">使用说明</button>
+  </nav>
+</header>
+
+<main>
+  <!-- ================= 首页 ================= -->
+  <section id="view-home" class="view active">
+    <div class="hero">
+      <h1>康膳智评</h1>
+      <p>面向基层养老驿站与康养护理人员的轻量化营养筛查辅助工具</p>
+    </div>
+    <div class="feature-grid">
+      <div class="feature-card" data-goto="mna" role="button" tabindex="0" title="MNA-SF 老年营养筛查">
+        <div class="icon">📋</div>
+        <div class="ftitle">MNA-SF 老年营养筛查</div>
+        <div class="fdesc">6 个问题快速完成老年营养风险初筛</div>
+      </div>
+      <div class="feature-card" data-goto="calc" role="button" tabindex="0" title="分人群营养测算">
+        <div class="icon">🧮</div>
+        <div class="ftitle">分人群营养测算</div>
+        <div class="fdesc">普通人 / 老年人肌少症 / 术后康复</div>
+      </div>
+      <div class="feature-card" data-goto="help" role="button" tabindex="0" title="使用说明与专业依据">
+        <div class="icon">📖</div>
+        <div class="ftitle">使用说明与专业依据</div>
+        <div class="fdesc">适用人群、注意事项与文献来源</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MNA-SF 筛查 ================= -->
+  <section id="view-mna" class="view">
+    <div class="card">
+      <h2>MNA-SF 老年营养筛查</h2>
+      <p class="subtitle">微型营养评定简表（MNA-SF）。请根据老年人近况逐题选择，满分 14 分。</p>
+
+      <div class="q-group">
+        <div class="q-title">Q1. 过去 3 个月内，是否因食欲不振、消化问题、咀嚼或吞咽困难而减少进食量？</div>
+        <div class="q-opt">
+          <label><input type="radio" name="q1" value="0">食量严重减少（0 分）</label>
+          <label><input type="radio" name="q1" value="1">食量中度减少（1 分）</label>
+          <label><input type="radio" name="q1" value="2">食量没有减少（2 分）</label>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-title">Q2. 过去 3 个月内体重下降情况？</div>
+        <div class="q-opt">
+          <label><input type="radio" name="q2" value="0">体重下降大于 3 kg（0 分）</label>
+          <label><input type="radio" name="q2" value="1">不知道（1 分）</label>
+          <label><input type="radio" name="q2" value="2">体重下降 1~3 kg（2 分）</label>
+          <label><input type="radio" name="q2" value="3">体重没有下降（3 分）</label>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-title">Q3. 活动能力？</div>
+        <div class="q-opt">
+          <label><input type="radio" name="q3" value="0">需长期卧床或坐轮椅（0 分）</label>
+          <label><input type="radio" name="q3" value="1">可以下床或离开轮椅，但不能外出（1 分）</label>
+          <label><input type="radio" name="q3" value="2">可以外出（2 分）</label>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-title">Q4. 过去 3 个月内是否受过心理压力或急性疾病？</div>
+        <div class="q-opt">
+          <label><input type="radio" name="q4" value="0">是（0 分）</label>
+          <label><input type="radio" name="q4" value="2">否（2 分）</label>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-title">Q5. 神经心理问题？</div>
+        <div class="q-opt">
+          <label><input type="radio" name="q5" value="0">严重痴呆或抑郁（0 分）</label>
+          <label><input type="radio" name="q5" value="1">轻度痴呆（1 分）</label>
+          <label><input type="radio" name="q5" value="2">无心理问题（2 分）</label>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <div class="q-title">Q6. 体重指数 BMI（kg/m²）？</div>
+        <div class="form-field" style="max-width:280px;margin-bottom:10px;">
+          <label class="lbl">计算方法</label>
+          <select id="mna-bmi-mode">
+            <option value="bmi">使用 BMI（推荐）</option>
+            <option value="calf">无法获取 BMI，改用小腿围</option>
+          </select>
+        </div>
+        <div class="q-opt" id="mna-q6-bmi">
+          <label><input type="radio" name="q6" value="0">BMI &lt; 19（0 分）</label>
+          <label><input type="radio" name="q6" value="1">19 ≤ BMI &lt; 21（1 分）</label>
+          <label><input type="radio" name="q6" value="2">21 ≤ BMI &lt; 23（2 分）</label>
+          <label><input type="radio" name="q6" value="3">BMI ≥ 23（3 分）</label>
+        </div>
+        <div class="form-field" id="mna-q6-calf" style="display:none;max-width:280px;">
+          <label class="lbl">小腿围（cm）</label>
+          <input type="number" id="mna-calf" min="0" max="80" step="0.5" placeholder="如 32">
+          <span class="hint">小腿围 &lt; 31 cm 为 0 分，≥ 31 cm 为 3 分</span>
+        </div>
+      </div>
+
+      <button class="btn btn-block" id="btn-mna-result" type="button">查看结果</button>
+
+      <!-- 筛查结果 -->
+      <div class="result" id="mna-result">
+        <h4 id="mna-result-title">—</h4>
+        <p>筛查总分：<span class="num" id="mna-result-score">—</span> / 14 分</p>
+        <p id="mna-result-advice"></p>
+        <div class="btn-row">
+          <button class="btn btn-green" id="btn-mna-to-diet" type="button">生成膳食建议 →</button>
+          <button class="btn btn-outline" id="btn-mna-reset" type="button">重新筛查</button>
+        </div>
+      </div>
+
+      <!-- 专业依据折叠面板 -->
+      <details class="panel">
+        <summary>MNA-SF 量表来源</summary>
+        <div class="panel-body">
+          Rubenstein LZ, Harker JO, Salva A, Guigoz Y, Vellas B. Screening for undernutrition in geriatric practice:
+          developing the short-form mini-nutritional assessment (MNA-SF). <em>J Gerontol A Biol Sci Med Sci.</em>
+          2001;56(6):M366-72.
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ================= 分人群营养测算 ================= -->
+  <section id="view-calc" class="view">
+    <div class="card">
+      <h2>分人群营养测算</h2>
+      <p class="subtitle">选择人群后填写对应信息，系统将计算每日能量与蛋白质需求。</p>
+
+      <!-- 人群切换 -->
+      <div class="seg" id="calc-seg">
+        <input type="radio" name="calc-pop" id="calc-pop-normal" value="normal" checked>
+        <label for="calc-pop-normal">普通人</label>
+        <input type="radio" name="calc-pop" id="calc-pop-sarc" value="sarc">
+        <label for="calc-pop-sarc">老年人肌少症</label>
+        <input type="radio" name="calc-pop" id="calc-pop-post" value="post">
+        <label for="calc-pop-post">术后康复</label>
+      </div>
+
+      <!-- ===== A. 普通人 ===== -->
+      <div class="sub-form show" id="form-normal">
+        <div class="form-grid">
+          <div class="form-field">
+            <label class="lbl">性别</label>
+            <select id="n-sex"><option value="male">男</option><option value="female">女</option></select>
+          </div>
+          <div class="form-field">
+            <label class="lbl">年龄（岁）</label>
+            <input type="number" id="n-age" min="0" max="120" placeholder="如 45">
+          </div>
+          <div class="form-field">
+            <label class="lbl">身高（cm）</label>
+            <input type="number" id="n-height" min="0" max="250" placeholder="如 165">
+          </div>
+          <div class="form-field">
+            <label class="lbl">体重（kg）</label>
+            <input type="number" id="n-weight" min="0" max="300" placeholder="如 60">
+          </div>
+          <div class="form-field" style="grid-column:1/-1;">
+            <label class="lbl">活动水平</label>
+            <select id="n-activity">
+              <option value="1.2">久坐少动（1.2）</option>
+              <option value="1.375">轻度活动（1.375）</option>
+              <option value="1.55">中度活动（1.55）</option>
+              <option value="1.725">重度活动（1.725）</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn btn-block" type="button" data-calc="normal">开始计算</button>
+
+        <div class="result ok" id="res-normal">
+          <h4>每日营养需求</h4>
+          <div class="kv">
+            <div class="kv-item"><div class="k">每日总能量需求</div><div class="v" id="n-energy">—</div></div>
+            <div class="kv-item"><div class="k">蛋白质建议摄入</div><div class="v" id="n-protein">—</div></div>
+          </div>
+          <p id="n-note"></p>
+          <div class="btn-row">
+            <button class="btn btn-green" type="button" data-diet-from="normal">生成膳食方案 →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== B. 老年人肌少症 ===== -->
+      <div class="sub-form" id="form-sarc">
+        <div class="form-grid">
+          <div class="form-field">
+            <label class="lbl">性别</label>
+            <select id="s-sex"><option value="male">男</option><option value="female">女</option></select>
+          </div>
+          <div class="form-field">
+            <label class="lbl">年龄（岁）</label>
+            <input type="number" id="s-age" min="0" max="120" placeholder="如 72">
+          </div>
+          <div class="form-field">
+            <label class="lbl">身高（cm）</label>
+            <input type="number" id="s-height" min="0" max="250" placeholder="如 160">
+          </div>
+          <div class="form-field">
+            <label class="lbl">体重（kg）</label>
+            <input type="number" id="s-weight" min="0" max="300" placeholder="如 55">
+          </div>
+          <div class="form-field">
+            <label class="lbl">小腿围（cm，可选）<span class="hint">男 &lt;34 / 女 &lt;33 提示风险</span></label>
+            <input type="number" id="s-calf" min="0" max="80" step="0.5" placeholder="如 32">
+          </div>
+          <div class="form-field">
+            <label class="lbl">握力（kg，可选）<span class="hint">男 &lt;28 / 女 &lt;18 提示风险</span></label>
+            <input type="number" id="s-grip" min="0" max="80" step="0.5" placeholder="如 22">
+          </div>
+          <div class="form-field">
+            <label class="lbl">步速（m/s，可选）<span class="hint">&lt; 1.0 m/s 提示风险</span></label>
+            <input type="number" id="s-speed" min="0" max="5" step="0.1" placeholder="如 0.9">
+          </div>
+          <div class="form-field">
+            <label class="lbl">活动情况<span class="hint">用于能量取值微调</span></label>
+            <select id="s-activity">
+              <option value="25">久坐为主</option>
+              <option value="27" selected>一般活动</option>
+              <option value="30">活动较多</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn btn-block" type="button" data-calc="sarc">开始计算</button>
+
+        <div class="result warn" id="res-sarc">
+          <h4 id="s-title">肌少症风险筛查</h4>
+          <p id="s-risk"></p>
+          <div class="kv">
+            <div class="kv-item"><div class="k">每日能量需求</div><div class="v" id="s-energy">—</div></div>
+            <div class="kv-item"><div class="k">蛋白质建议摄入</div><div class="v" id="s-protein">—</div></div>
+          </div>
+          <p id="s-note"></p>
+          <div class="btn-row">
+            <button class="btn btn-green" type="button" data-diet-from="sarc">生成膳食方案 →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== C. 术后康复 ===== -->
+      <div class="sub-form" id="form-post">
+        <div class="form-grid">
+          <div class="form-field">
+            <label class="lbl">性别</label>
+            <select id="p-sex"><option value="male">男</option><option value="female">女</option></select>
+          </div>
+          <div class="form-field">
+            <label class="lbl">年龄（岁）</label>
+            <input type="number" id="p-age" min="0" max="120" placeholder="如 55">
+          </div>
+          <div class="form-field">
+            <label class="lbl">身高（cm）</label>
+            <input type="number" id="p-height" min="0" max="250" placeholder="如 168">
+          </div>
+          <div class="form-field">
+            <label class="lbl">体重（kg）</label>
+            <input type="number" id="p-weight" min="0" max="300" placeholder="如 62">
+          </div>
+          <div class="form-field">
+            <label class="lbl">手术类型</label>
+            <select id="p-surgery">
+              <option value="gi">胃肠手术</option>
+              <option value="ortho">骨科手术</option>
+              <option value="other">其他</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label class="lbl">术后天数（天）</label>
+            <input type="number" id="p-days" min="0" max="365" placeholder="如 5">
+          </div>
+          <div class="form-field">
+            <label class="lbl">当前进食情况</label>
+            <select id="p-diet">
+              <option value="normal">正常饮食</option>
+              <option value="half">半流质</option>
+              <option value="liquid">流质</option>
+              <option value="nil">禁食</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label class="lbl">体重变化</label>
+            <select id="p-weightchange">
+              <option value="none">无明显下降</option>
+              <option value="less5">下降 &lt;5%</option>
+              <option value="more5">下降 ≥5%</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn btn-block" type="button" data-calc="post">开始计算</button>
+
+        <div class="result warn" id="res-post">
+          <h4>术后每日营养需求</h4>
+          <div class="kv">
+            <div class="kv-item"><div class="k">每日能量需求</div><div class="v" id="p-energy">—</div></div>
+            <div class="kv-item"><div class="k">蛋白质建议摄入</div><div class="v" id="p-protein">—</div></div>
+          </div>
+          <p id="p-note"></p>
+          <div class="btn-row">
+            <button class="btn btn-green" type="button" data-diet-from="post">生成膳食方案 →</button>
+          </div>
+        </div>
+
+        <!-- 专业依据折叠面板 -->
+        <details class="panel">
+          <summary>术后营养支持参考来源</summary>
+          <div class="panel-body">
+            术后营养支持参考 ESPEN 指南：Weimann A, Braga M, Carli F, et al. ESPEN guideline: Clinical nutrition in surgery.
+            <em>Clin Nutr.</em> 2017;36(3):623-650.
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 膳食方案与简易评估报告 ================= -->
+  <section id="view-diet" class="view">
+    <div class="card" id="diet-controls">
+      <h2>膳食方案与简易评估报告</h2>
+      <p class="subtitle">可独立使用，也可接收 MNA-SF 或分人群测算的结果参数自动带入。</p>
+
+      <!-- 来自其他模块的参考参数 -->
+      <div class="result ok" id="diet-ref" style="display:none;margin-top:0;margin-bottom:16px;"></div>
+
+      <div class="form-grid">
+        <div class="form-field">
+          <label class="lbl">人群类型</label>
+          <select id="diet-pop">
+            <option value="normal">普通人</option>
+            <option value="sarc">老年人肌少症</option>
+            <option value="post">术后康复</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label class="lbl">姓名（可不填）</label>
+          <input type="text" id="diet-name" placeholder="如 王奶奶">
+        </div>
+        <div class="form-field">
+          <label class="lbl">性别</label>
+          <select id="diet-sex"><option value="male">男</option><option value="female">女</option></select>
+        </div>
+        <div class="form-field">
+          <label class="lbl">年龄（岁）</label>
+          <input type="number" id="diet-age" min="0" max="120" placeholder="如 70">
+        </div>
+        <div class="form-field">
+          <label class="lbl">体重（kg）</label>
+          <input type="number" id="diet-weight" min="0" max="300" placeholder="如 60">
+        </div>
+        <div class="form-field" id="diet-texture-field" style="display:none;">
+          <label class="lbl">当前进食情况</label>
+          <select id="diet-texture">
+            <option value="normal">正常饮食</option>
+            <option value="soft">软食</option>
+            <option value="half">半流质</option>
+            <option value="liquid">流质</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn btn-block" id="btn-gen-diet" type="button">生成膳食方案与报告</button>
+    </div>
+
+    <!-- 报告区 -->
+    <div id="report-wrap" style="display:none;">
+      <div id="report">
+        <div class="report-head">
+          <h3>康膳智评 · 营养评估报告</h3>
+          <div class="report-meta">
+            <span id="r-name">姓名：—</span>
+            <span id="r-date">日期：—</span>
+            <span id="r-pop">人群：—</span>
+          </div>
+        </div>
+
+        <div class="report-section">
+          <h4>评估结果摘要</h4>
+          <table class="summary">
+            <tbody id="r-summary-body"></tbody>
+          </table>
+        </div>
+
+        <div class="report-section">
+          <h4>膳食方案（示例）</h4>
+          <div class="meal" id="r-meals"></div>
+        </div>
+
+        <div class="report-section">
+          <h4>营养建议</h4>
+          <ul class="note-box" id="r-notes" style="margin-top:0;"></ul>
+        </div>
+
+        <div class="disclaimer">
+          本工具仅供营养风险筛查和健康参考，不替代执业医师或临床营养师的诊断与治疗建议。如有异常，请及时转诊。
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn" id="btn-print" type="button">🖨 打印报告</button>
+        <button class="btn btn-outline" id="btn-diet-reset" type="button">重新填写</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 使用说明与专业依据 ================= -->
+  <section id="view-help" class="view">
+    <div class="card">
+      <h2>使用说明与专业依据</h2>
+
+      <h3>工具用途</h3>
+      <p>用于基层养老驿站、康养机构、社区护理人员对老年人及康复人群进行初步营养风险筛查和营养测算。</p>
+
+      <h3>适用人群</h3>
+      <ul>
+        <li>65 岁以上老年人</li>
+        <li>术后康复人群</li>
+        <li>普通成年人</li>
+      </ul>
+
+      <h3>不适用场景</h3>
+      <p>危重症患者、特殊代谢疾病患者、孕产妇等，应由专业营养师或医生评估。</p>
+
+      <h3>专业依据列表</h3>
+      <ul>
+        <li><strong>MNA-SF：</strong>Rubenstein LZ, et al. J Gerontol A Biol Sci Med Sci. 2001;56(6):M366-72.</li>
+        <li><strong>肌少症筛查：</strong>AWGS 2019（Chen LK, et al. J Am Med Dir Assoc. 2020;21(3):300-307.）</li>
+        <li><strong>术后营养：</strong>ESPEN guideline（Weimann A, et al. Clin Nutr. 2017;36(3):623-650.）</li>
+        <li><strong>膳食模式：</strong>中国居民膳食指南 2022</li>
+      </ul>
+
+      <h3>免责声明</h3>
+      <p>本工具仅供营养风险筛查和健康参考，不替代执业医师或临床营养师的诊断与治疗建议。如有异常，请及时转诊。</p>
+    </div>
+  </section>
+</main>
+
+<!-- ===== 页脚免责声明（所有页面统一展示） ===== -->
+<footer class="foot">
+  本工具仅供营养风险筛查和健康参考，不替代执业医师或临床营养师的诊断与治疗建议。如有异常，请及时转诊。
+</footer>
+
+<script>
+/* =========================================================
+   康膳智评 - 全部交互逻辑（原生 JavaScript，无外部依赖）
+   ========================================================= */
+
+// ---------- 全局状态：模块间传递的评估参数 ----------
+var appState = {
+  mnaScore: null,          // MNA-SF 总分
+  mnaLevel: null,          // 营养状况等级（营养不良/有风险/正常）
+  dietParams: null         // 传递给膳食方案模块的参数
+};
+
+// ---------- 工具函数 ----------
+// 读取数字输入框的值，返回数字或 null（空/非法）
+function num(id) {
+  var v = document.getElementById(id).value.trim();
+  if (v === '') return null;
+  var n = parseFloat(v);
+  return (isNaN(n)) ? null : n;
+}
+// 四舍五入到指定位数
+function r1(n) { return Math.round(n * 10) / 10; }
+// 格式化范围，如 "1800~2200"
+function fmtRange(lo, hi) { return Math.round(lo) + '~' + Math.round(hi); }
+// 统一弹窗提示缺失必填项
+function need(cond, msg) {
+  if (!cond) { alert(msg); return true; }
+  return false;
+}
+// 当前日期，格式 YYYY-MM-DD
+function todayStr() {
+  var d = new Date();
+  var p = function (x) { return (x < 10 ? '0' : '') + x; };
+  return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
+}
+
+// ---------- 模块视图切换 ----------
+function showModule(id) {
+  var views = document.querySelectorAll('.view');
+  for (var i = 0; i < views.length; i++) views[i].classList.remove('active');
+  document.getElementById('view-' + id).classList.add('active');
+
+  var links = document.querySelectorAll('.nav-link');
+  for (var j = 0; j < links.length; j++) {
+    links[j].classList.toggle('active', links[j].getAttribute('data-view') === id);
+  }
+  // 进入膳食模块时带入参考参数
+  if (id === 'diet') applyDietParams();
+  window.scrollTo(0, 0);
+}
+
+// 顶部导航绑定
+var navLinks = document.querySelectorAll('.nav-link');
+for (var nl = 0; nl < navLinks.length; nl++) {
+  navLinks[nl].addEventListener('click', function () {
+    showModule(this.getAttribute('data-view'));
+  });
+}
+
+// 首页功能卡片绑定
+var feats = document.querySelectorAll('.feature-card');
+for (var fc = 0; fc < feats.length; fc++) {
+  (function (el) {
+    var goto = function () { showModule(el.getAttribute('data-goto')); };
+    el.addEventListener('click', goto);
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goto(); }
+    });
+  })(feats[fc]);
+}
+
+// 单选选项高亮（事件委托）：同组内切换 .sel 样式
+document.addEventListener('change', function (e) {
+  var t = e.target;
+  if (t && t.type === 'radio' && t.name) {
+    var radios = document.querySelectorAll('input[name="' + t.name + '"]');
+    for (var i = 0; i < radios.length; i++) {
+      var l = radios[i].closest('label');
+      if (l) l.classList.toggle('sel', radios[i].checked);
+    }
+  }
+});
+
+// =========================================================
+// 模块 2：MNA-SF 老年营养筛查
+// =========================================================
+
+// Q6 计算方法切换：BMI ↔ 小腿围
+document.getElementById('mna-bmi-mode').addEventListener('change', function () {
+  var isCalf = this.value === 'calf';
+  document.getElementById('mna-q6-bmi').style.display = isCalf ? 'none' : 'block';
+  document.getElementById('mna-q6-calf').style.display = isCalf ? 'flex' : 'none';
+});
+
+// 查看结果
+document.getElementById('btn-mna-result').addEventListener('click', function () {
+  var qs = ['q1', 'q2', 'q3', 'q4', 'q5'];
+  var names = { q1: '第 1 题（食欲/进食）', q2: '第 2 题（体重下降）', q3: '第 3 题（活动能力）',
+                q4: '第 4 题（心理压力/疾病）', q5: '第 5 题（神经心理）' };
+  var total = 0;
+  var i;
+  for (i = 0; i < qs.length; i++) {
+    var el = document.querySelector('input[name="' + qs[i] + '"]:checked');
+    if (!el) { alert('请完成 ' + names[qs[i]]); return; }
+    total += parseInt(el.value, 10);
+  }
+  // Q6
+  var mode = document.getElementById('mna-bmi-mode').value;
+  if (mode === 'bmi') {
+    var q6 = document.querySelector('input[name="q6"]:checked');
+    if (!q6) { alert('请完成第 6 题（BMI）'); return; }
+    total += parseInt(q6.value, 10);
+  } else {
+    var calf = num('mna-calf');
+    if (calf === null) { alert('请输入小腿围数值'); return; }
+    total += (calf < 31) ? 0 : 3;
+  }
+
+  // 结果分级
+  var level, advice;
+  if (total <= 7) {
+    level = '营养不良';
+    advice = '建议尽快转诊至临床营养科或社区营养门诊，由专业人员进一步评估并制定个体化营养支持方案。';
+  } else if (total <= 11) {
+    level = '有营养不良风险';
+    advice = '建议加强营养监测（体重、进食量），及时提供膳食建议，并建议咨询营养专业人员，预防营养不良发生。';
+  } else {
+    level = '营养状况正常';
+    advice = '继续保持健康均衡饮食，坚持适量活动，建议定期（如每季度）进行营养筛查。';
+  }
+
+  // 记录到全局状态，供"生成膳食建议"使用
+  appState.mnaScore = total;
+  appState.mnaLevel = level;
+
+  var res = document.getElementById('mna-result');
+  res.className = 'result ' + (level === '营养不良' ? 'bad' : (level === '有营养不良风险' ? 'warn' : 'ok')) + ' show';
+  document.getElementById('mna-result-title').textContent = '评估结果：' + level;
+  document.getElementById('mna-result-score').textContent = total;
+  document.getElementById('mna-result-advice').textContent = advice;
+
+  // 结果区滚入视野
+  res.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+});
+
+// 重新筛查：清空所有选项
+document.getElementById('btn-mna-reset').addEventListener('click', function () {
+  var radios = document.querySelectorAll('#view-mna input[type="radio"]');
+  for (var i = 0; i < radios.length; i++) radios[i].checked = false;
+  var labels = document.querySelectorAll('#view-mna .q-opt label');
+  for (var j = 0; j < labels.length; j++) labels[j].classList.remove('sel');
+  document.getElementById('mna-result').className = 'result';
+  document.getElementById('mna-calf').value = '';
+  document.getElementById('mna-bmi-mode').value = 'bmi';
+  document.getElementById('mna-q6-bmi').style.display = 'block';
+  document.getElementById('mna-q6-calf').style.display = 'none';
+  appState.mnaScore = null;
+  appState.mnaLevel = null;
+  window.scrollTo(0, 0);
+});
+
+// "生成膳食建议"：把 MNA 结果带入膳食模块
+document.getElementById('btn-mna-to-diet').addEventListener('click', function () {
+  if (appState.mnaScore === null) return;
+  // 携带 MNA 结果，人群默认按老年人处理（可手动切换）
+  appState.dietParams = {
+    population: 'sarc',
+    energy: null,
+    protein: null,
+    mnaScore: appState.mnaScore,
+    mnaLevel: appState.mnaLevel,
+    from: 'mna'
+  };
+  showModule('diet');
+});
+
+// =========================================================
+// 模块 3：分人群营养测算
+// =========================================================
+
+// 人群切换
+var popInputs = document.querySelectorAll('input[name="calc-pop"]');
+for (var pi = 0; pi < popInputs.length; pi++) {
+  popInputs[pi].addEventListener('change', function () {
+    var v = this.value;
+    var map = { normal: 'form-normal', sarc: 'form-sarc', post: 'form-post' };
+    var forms = document.querySelectorAll('.sub-form');
+    for (var i = 0; i < forms.length; i++) forms[i].classList.remove('show');
+    document.getElementById(map[v]).classList.add('show');
+    // 高亮分段按钮
+    var labels = document.querySelectorAll('#calc-seg label');
+    for (var j = 0; j < labels.length; j++) labels[j].classList.remove('sel');
+    var l = this.closest('label');
+    if (l) l.classList.add('sel');
+    window.scrollTo(0, 0);
+  });
+}
+
+// Mifflin-St Jeor 基础能量消耗（BEE）
+function mifflin(sex, w, h, age) {
+  return 10 * w + 6.25 * h - 5 * age + (sex === 'male' ? 5 : -161);
+}
+
+// ---- A. 普通人 ----
+document.querySelector('[data-calc="normal"]').addEventListener('click', function () {
+  var sex = document.getElementById('n-sex').value;
+  var age = num('n-age'), h = num('n-height'), w = num('n-weight');
+  if (need(age !== null, '请输入年龄') || need(h !== null, '请输入身高') || need(w !== null, '请输入体重')) return;
+  if (need(age > 0 && h > 0 && w > 0, '年龄、身高、体重须大于 0')) return;
+
+  var af = parseFloat(document.getElementById('n-activity').value);
+  var bee = mifflin(sex, w, h, age);
+  var tee = bee * af;
+  var pLow = 0.8 * w, pHigh = 1.0 * w;
+
+  document.getElementById('n-energy').textContent = Math.round(tee) + ' kcal';
+  document.getElementById('n-protein').textContent = r1(pLow) + '~' + r1(pHigh) + ' g';
+  document.getElementById('n-note').textContent =
+    '依据 Mifflin-St Jeor 公式计算基础能量消耗 ' + Math.round(bee) + ' kcal，乘以活动系数 ' + af +
+    ' 得到每日总能量需求。蛋白质按 0.8~1.0 g/kg 体重建议。';
+
+  // 存结果，供生成膳食方案
+  appState.lastCalc = { population: 'normal', energy: tee, proteinLow: pLow, proteinHigh: pHigh, sex: sex, weight: w, age: age };
+
+  var res = document.getElementById('res-normal');
+  res.className = res.className.replace('show', '') + ' show';
+  res.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+});
+
+// ---- B. 老年人肌少症 ----
+document.querySelector('[data-calc="sarc"]').addEventListener('click', function () {
+  var sex = document.getElementById('s-sex').value;
+  var age = num('s-age'), h = num('s-height'), w = num('s-weight');
+  if (need(age !== null, '请输入年龄') || need(h !== null, '请输入身高') || need(w !== null, '请输入体重')) return;
+  if (need(age > 0 && h > 0 && w > 0, '年龄、身高、体重须大于 0')) return;
+
+  // ---- 肌少症风险筛查（AWGS 2019）----
+  var calf = num('s-calf'), grip = num('s-grip'), speed = num('s-speed');
+  var risks = [];
+  if (calf !== null) {
+    var calfTh = sex === 'male' ? 34 : 33;
+    if (calf < calfTh) risks.push('小腿围 ' + calf + ' cm（低于' + (sex === 'male' ? '男' : '女') + '性参考 ' + calfTh + ' cm）');
+  }
+  if (grip !== null) {
+    var gripTh = sex === 'male' ? 28 : 18;
+    if (grip < gripTh) risks.push('握力 ' + grip + ' kg（低于' + (sex === 'male' ? '男' : '女') + '性参考 ' + gripTh + ' kg）');
+  }
+  if (speed !== null && speed < 1.0) risks.push('步速 ' + speed + ' m/s（低于 1.0 m/s）');
+
+  var riskText;
+  if (risks.length > 0) {
+    riskText = '以下指标提示异常：' + risks.join('；') + '。可能存在肌少症风险，建议进一步评估（如肌量测定）。';
+  } else if (calf === null && grip === null && speed === null) {
+    riskText = '未填写筛查指标，暂不进行肌少症风险判断，以下仅提供营养建议。';
+  } else {
+    riskText = '已填写的筛查指标均在参考范围内，未见明显肌少症风险。';
+  }
+
+  // ---- 营养测算：25~30 kcal/kg，蛋白质 1.2~1.5 g/kg ----
+  var actFactor = parseFloat(document.getElementById('s-activity').value); // 25 / 27 / 30
+  var energyLo = 25 * w, energyHi = 30 * w;
+  var energyRec = actFactor * w;
+  var pLow = 1.2 * w, pHigh = 1.5 * w;
+
+  document.getElementById('s-title').textContent = risks.length > 0 ? '肌少症风险筛查：提示风险' : '肌少症风险筛查';
+  document.getElementById('s-risk').textContent = riskText;
+  document.getElementById('s-energy').textContent = fmtRange(energyLo, energyHi) + ' kcal（按 ' + actFactor + ' kcal/kg 取值）';
+  document.getElementById('s-protein').textContent = r1(pLow) + '~' + r1(pHigh) + ' g';
+  document.getElementById('s-note').innerHTML =
+    '能量需求按 25~30 kcal/kg 体重计算，根据活动情况微调。蛋白质建议 1.2~1.5 g/kg 体重。' +
+    '建议：强调优质蛋白摄入（如乳清蛋白、瘦肉、蛋、豆制品），补充维生素 D（800~1000 IU/天，遵医嘱）' +
+    '和富含亮氨酸的食物（牛肉、鸡肉、乳制品、大豆）。';
+
+  appState.lastCalc = {
+    population: 'sarc', energyLo: energyLo, energyHi: energyHi, energyRec: energyRec,
+    proteinLow: pLow, proteinHigh: pHigh, sex: sex, weight: w, age: age,
+    sarcRisk: risks.length > 0
+  };
+
+  var res = document.getElementById('res-sarc');
+  res.className = res.className.replace('show', '') + ' show';
+  res.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+});
+
+// ---- C. 术后康复 ----
+document.querySelector('[data-calc="post"]').addEventListener('click', function () {
+  var sex = document.getElementById('p-sex').value;
+  var age = num('p-age'), h = num('p-height'), w = num('p-weight');
+  if (need(age !== null, '请输入年龄') || need(h !== null, '请输入身高') || need(w !== null, '请输入体重')) return;
+  if (need(age > 0 && h > 0 && w > 0, '年龄、身高、体重须大于 0')) return;
+
+  var surgery = document.getElementById('p-surgery').value;
+  var dietType = document.getElementById('p-diet').value;
+  var wc = document.getElementById('p-weightchange').value;
+
+  // 应激系数：胃肠 1.1~1.2 取 1.15，骨科 1.2~1.3 取 1.25，其他 1.1
+  var stressMap = { gi: 1.15, ortho: 1.25, other: 1.1 };
+  var stress = stressMap[surgery];
+
+  // 蛋白范围：按手术类型调整，胃肠取较高值
+  var pLow, pHigh;
+  if (surgery === 'gi') { pLow = 1.6; pHigh = 2.0; }
+  else if (surgery === 'ortho') { pLow = 1.4; pHigh = 1.8; }
+  else { pLow = 1.2; pHigh = 1.5; }
+
+  // 能量：BEE × 应激系数；若体重下降≥5% 或流质/禁食，再增加 15%
+  var bee = mifflin(sex, w, h, age);
+  var energy = bee * stress;
+  var boosted = (wc === 'more5' || dietType === 'liquid' || dietType === 'nil');
+  var boostNote = '';
+  if (boosted) { energy *= 1.15; boostNote = '（因体重下降≥5% 或当前为流质/禁食饮食，能量需求额外增加约 15%）'; }
+
+  var dietNote;
+  if (dietType === 'nil') {
+    dietNote = '当前为禁食状态，建议在医生或营养师指导下逐步恢复经口进食，必要时考虑肠内/肠外营养支持。';
+  } else if (dietType === 'liquid') {
+    dietNote = '当前为流质饮食，建议在医生或营养师指导下逐步过渡至半流质/软食，可考虑口服营养补充（ONS）。';
+  } else if (dietType === 'half') {
+    dietNote = '当前为半流质饮食，注意少量多餐，在耐受前提下逐步向软食/正常饮食过渡。';
+  } else {
+    dietNote = '保持均衡饮食，保证优质蛋白与能量摄入，促进伤口愈合与康复。';
+  }
+
+  document.getElementById('p-energy').textContent = Math.round(energy) + ' kcal' + boostNote;
+  document.getElementById('p-protein').textContent = r1(pLow * w) + '~' + r1(pHigh * w) + ' g';
+  document.getElementById('p-note').textContent =
+    '基础能量需求按 Mifflin-St Jeor 公式计算，乘以手术应激系数 ' + stress + '。' + dietNote;
+
+  appState.lastCalc = {
+    population: 'post', energy: energy, proteinLow: pLow * w, proteinHigh: pHigh * w,
+    sex: sex, weight: w, age: age, texture: dietType, weightChange: wc
+  };
+
+  var res = document.getElementById('res-post');
+  res.className = res.className.replace('show', '') + ' show';
+  res.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+});
+
+// =========================================================
+// 模块 4：膳食方案与简易评估报告
+// =========================================================
+
+// 人群变化时显示/隐藏"当前进食情况"（术后康复）
+document.getElementById('diet-pop').addEventListener('change', function () {
+  var isPost = this.value === 'post';
+  document.getElementById('diet-texture-field').style.display = isPost ? 'flex' : 'none';
+});
+
+// 进入膳食模块时，把其它模块的结果带入参考参数区
+function applyDietParams() {
+  var ref = document.getElementById('diet-ref');
+  var p = appState.dietParams;
+
+  // 重置"重新填写"后不带参数时，仅隐藏参考框
+  if (!p) { ref.className = 'result ok'; ref.style.display = 'none'; return; }
+
+  // 若已有带参计算，预填人群
+  if (p.population) document.getElementById('diet-pop').value = p.population;
+  document.getElementById('diet-texture-field').style.display = p.population === 'post' ? 'flex' : 'none';
+
+  var html = '<h4 style="margin-bottom:6px;">已带入的评估参数</h4>';
+  if (p.from === 'mna') {
+    html += '<p>MNA-SF 得分：<strong>' + p.mnaScore + '</strong> / 14 分（' + p.mnaLevel + '）。';
+    html += '该筛查面向老年人，已默认选择「老年人肌少症」人群，可手动切换。</p>';
+  } else {
+    html += '<p>人群：<strong>' + popName(p.population) + '</strong>；';
+    if (p.energy) html += '能量需求：<strong>' + Math.round(p.energy) + '</strong> kcal/日；';
+    if (p.energyLo && p.energyHi) html += '能量需求：<strong>' + fmtRange(p.energyLo, p.energyHi) + '</strong> kcal/日；';
+    html += '蛋白质：<strong>' + r1(p.proteinLow) + '~' + r1(p.proteinHigh) + '</strong> g/日。';
+    html += '下方三餐示例已按此需求缩放分量。</p>';
+  }
+  ref.innerHTML = html;
+  ref.style.display = 'block';
+}
+function popName(v) {
+  var m = { normal: '普通人', sarc: '老年人肌少症', post: '术后康复' };
+  return m[v] || v;
+}
+
+// 生成膳食方案与报告
+document.getElementById('btn-gen-diet').addEventListener('click', function () {
+  var pop = document.getElementById('diet-pop').value;
+  var name = document.getElementById('diet-name').value.trim();
+  var sex = document.getElementById('diet-sex').value;
+  var age = num('diet-age'), w = num('diet-weight');
+
+  if (need(age !== null, '请输入年龄') || need(w !== null, '请输入体重')) return;
+  if (need(age > 0 && w > 0, '年龄、体重须大于 0')) return;
+
+  var p = appState.dietParams;
+  var params = { population: pop, name: name, age: age, weight: w, sex: sex };
+
+  // 能量与蛋白质：优先用带入参数；否则按人群估算
+  if (p && (p.from === 'mna' || p.population === pop)) {
+    if (p.mnaScore !== null) params.mnaScore = p.mnaScore;
+    if (p.energy !== null) params.energy = p.energy;
+    if (p.energyLo && p.energyHi) { params.energyLo = p.energyLo; params.energyHi = p.energyHi; }
+    params.proteinLow = p.proteinLow; params.proteinHigh = p.proteinHigh;
+    params.sarcRisk = p.sarcRisk;
+    params.texture = p.texture;
+  } else {
+    // 独立估算（无带入参数或人群已切换）
+    params = estimateParams(params, pop);
+  }
+  // 术后人群的食物质地：以表单选择为准
+  if (pop === 'post') params.texture = document.getElementById('diet-texture').value;
+
+  renderReport(params);
+});
+
+// 独立使用时按人群估算能量/蛋白质（用于三餐分量缩放）
+function estimateParams(params, pop) {
+  var sex = params.sex, w = params.weight, h = 165, age = params.age;
+  if (pop === 'normal') {
+    var bee = mifflin(sex, w, h, age);
+    params.energy = bee * 1.375;          // 默认按轻度活动
+    params.proteinLow = 0.8 * w; params.proteinHigh = 1.0 * w;
+  } else if (pop === 'sarc') {
+    params.energyLo = 25 * w; params.energyHi = 30 * w;
+    params.proteinLow = 1.2 * w; params.proteinHigh = 1.5 * w;
+  } else if (pop === 'post') {
+    params.energy = mifflin(sex, w, h, age) * 1.15;
+    params.proteinLow = 1.4 * w; params.proteinHigh = 1.8 * w;
+  }
+  return params;
+}
+
+// 根据人群生成三餐示例
+function buildMeals(pop, params) {
+  var meals = [];
+  function add(time, food) { meals.push({ time: time, food: food }); }
+
+  // 计算分量缩放提示（仅普通/肌少症按能量大致调整主食）
+  var energyRef = params.energy || ((params.energyLo + params.energyHi) / 2) || 1800;
+  var portionNote = '';
+  if (energyRef >= 2200) portionNote = '（能量需求较高，主食可加半碗）';
+  else if (energyRef < 1500) portionNote = '（能量需求偏低，注意少量多餐）';
+
+  if (pop === 'normal') {
+    add('早餐', '燕麦粥 1 碗 + 水煮蛋 1 个 + 牛奶 200 ml' + portionNote);
+    add('上午加餐', '水果 1 份（如苹果 1 个）');
+    add('午餐', '米饭 1 碗（约 150 g）+ 清蒸鱼 100 g + 炒青菜 200 g');
+    add('下午加餐', '酸奶 1 杯 + 核桃 2 颗');
+    add('晚餐', '杂粮饭 1 碗 + 豆腐 100 g + 瘦肉 50 g + 蔬菜汤');
+  } else if (pop === 'sarc') {
+    add('早餐', '牛奶燕麦粥 1 碗 + 水煮蛋 2 个 + 全麦面包 1 片');
+    add('上午加餐', '酸奶 1 杯 + 坚果 1 小把');
+    add('午餐', '杂粮饭 1 碗 + 清蒸鱼 120 g + 西兰花炒瘦肉 100 g');
+    add('下午加餐', '香蕉 1 根 + 鸡蛋 1 个');
+    add('晚餐', '杂粮饭 1 碗 + 豆腐 100 g + 鸡胸肉 80 g + 绿叶蔬菜 200 g');
+    add('睡前加餐', '牛奶 1 杯（必要时）');
+  } else if (pop === 'post') {
+    var t = params.texture || 'normal';
+    if (t === 'liquid') {
+      add('早餐', '米汤 1 碗 + 藕粉 1 杯');
+      add('上午加餐', '牛奶 200 ml（如无乳糖不耐）');
+      add('午餐', '去油鱼汤/鸡汤 1 碗 + 蔬菜汁 1 杯');
+      add('下午加餐', '豆浆 200 ml');
+      add('晚餐', '滤渣烂粥 1 碗 + 蛋花汤 1 碗');
+    } else if (t === 'half') {
+      add('早餐', '白粥 1 碗 + 蒸蛋羹 1 份');
+      add('上午加餐', '酸奶 1 杯');
+      add('午餐', '烂面条 1 碗 + 鱼肉泥 80 g + 煮烂碎蔬菜');
+      add('下午加餐', '藕粉 1 杯');
+      add('晚餐', '菜肉粥 1 碗 + 豆腐脑 1 碗');
+    } else { // soft / normal
+      add('早餐', '软粥 1 碗 + 水煮蛋 1 个 + 牛奶 200 ml');
+      add('上午加餐', '香蕉 1 根');
+      add('午餐', '软米饭 1 碗 + 清蒸鱼 100 g + 煮烂蔬菜 200 g');
+      add('下午加餐', '酸奶 1 杯');
+      add('晚餐', '软米饭/馒头 + 蒸蛋 1 份 + 肉末豆腐 100 g + 蔬菜汤');
+    }
+  }
+  return meals;
+}
+
+// 渲染报告
+function renderReport(params) {
+  var p = params;
+
+  // 顶部信息
+  document.getElementById('r-name').textContent = '姓名：' + (p.name || '—');
+  document.getElementById('r-date').textContent = '日期：' + todayStr();
+  document.getElementById('r-pop').textContent = '人群：' + popName(p.population);
+
+  // 摘要表格
+  var rows = '';
+  rows += '<tr><th>人群类型</th><td>' + popName(p.population) + '</td></tr>';
+  if (p.mnaScore !== null && p.mnaScore !== undefined) {
+    rows += '<tr><th>MNA-SF 得分</th><td>' + p.mnaScore + ' / 14 分（' + (p.mnaLevel || '—') + '）</td></tr>';
+  }
+  if (p.energy !== null && p.energy !== undefined) {
+    rows += '<tr><th>每日能量需求</th><td>' + Math.round(p.energy) + ' kcal</td></tr>';
+  } else if (p.energyLo && p.energyHi) {
+    rows += '<tr><th>每日能量需求</th><td>' + fmtRange(p.energyLo, p.energyHi) + ' kcal</td></tr>';
+  }
+  if (p.proteinLow && p.proteinHigh) {
+    rows += '<tr><th>蛋白质建议</th><td>' + r1(p.proteinLow) + '~' + r1(p.proteinHigh) + ' g/日</td></tr>';
+  }
+  if (p.sarcRisk) rows += '<tr><th>肌少症提示</th><td>存在肌少症风险，建议进一步评估</td></tr>';
+  if (p.population === 'post' && p.texture) {
+    var tn = { normal: '正常饮食', soft: '软食', half: '半流质', liquid: '流质' };
+    rows += '<tr><th>当前进食情况</th><td>' + (tn[p.texture] || p.texture) + '</td></tr>';
+  }
+  document.getElementById('r-summary-body').innerHTML = rows;
+
+  // 三餐
+  var meals = buildMeals(p.population, p);
+  var mealHtml = '';
+  for (var i = 0; i < meals.length; i++) {
+    mealHtml += '<div class="meal-item"><div class="time">' + meals[i].time + '</div><div class="food">' + meals[i].food + '</div></div>';
+  }
+  document.getElementById('r-meals').innerHTML = mealHtml;
+
+  // 营养建议
+  var notes = [];
+  if (p.population === 'sarc') {
+    notes.push('每餐都要安排优质蛋白，可加餐（如酸奶、坚果），避免长时间空腹。');
+    notes.push('优先选择富含亮氨酸的食物：牛肉、鸡肉、乳制品、大豆制品。');
+    notes.push('建议在医生指导下补充维生素 D（800~1000 IU/天）与钙。');
+    notes.push('配合适量抗阻运动（如弹力带训练），对维持肌量有益。');
+  } else if (p.population === 'post') {
+    if (p.texture === 'liquid') {
+      notes.push('当前为流质饮食，建议在医生或营养师指导下逐步过渡至半流质/软食。');
+      notes.push('可考虑口服营养补充（ONS）以满足高蛋白需求。');
+      notes.push('少量多餐，每次进食量不宜过大。');
+    } else if (p.texture === 'half') {
+      notes.push('当前为半流质饮食，注意少食多餐，逐步向软食过渡。');
+      notes.push('保证蛋白质摄入（鱼、蛋、奶、豆制品），促进伤口愈合。');
+    } else {
+      notes.push('保证优质蛋白与充足能量摄入，促进伤口愈合与康复。');
+      notes.push('食物选择易消化的软食/正常饮食，少油少盐。');
+    }
+  } else {
+    notes.push('参照中国居民膳食指南 2022：食物多样，谷薯类为主。');
+    notes.push('保证足量蔬菜水果，适量奶豆坚果。');
+    notes.push('少油少盐，足量饮水（1500~1700 ml/日）。');
+  }
+  var noteHtml = '';
+  for (var k = 0; k < notes.length; k++) noteHtml += '<li>' + notes[k] + '</li>';
+  document.getElementById('r-notes').innerHTML = noteHtml;
+
+  document.getElementById('report-wrap').style.display = 'block';
+  document.getElementById('report-wrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// 打印报告
+document.getElementById('btn-print').addEventListener('click', function () { window.print(); });
+
+// 重新填写：清空膳食模块
+document.getElementById('btn-diet-reset').addEventListener('click', function () {
+  document.getElementById('diet-name').value = '';
+  document.getElementById('diet-age').value = '';
+  document.getElementById('diet-weight').value = '';
+  document.getElementById('diet-sex').value = 'male';
+  document.getElementById('diet-pop').value = 'normal';
+  document.getElementById('diet-texture').value = 'normal';
+  document.getElementById('diet-texture-field').style.display = 'none';
+  document.getElementById('report-wrap').style.display = 'none';
+  appState.dietParams = null;
+  appState.lastCalc = null;
+  window.scrollTo(0, 0);
+});
+
+// =========================================================
+// 模块 4 辅助：分人群测算结果 → 膳食方案
+// =========================================================
+var dietFromBtns = document.querySelectorAll('[data-diet-from]');
+for (var db = 0; db < dietFromBtns.length; db++) {
+  dietFromBtns[db].addEventListener('click', function () {
+    var from = this.getAttribute('data-diet-from');
+    var lc = appState.lastCalc;
+    if (!lc) return;
+
+    var p = { from: 'calc' };
+    if (from === 'normal') {
+      p.population = 'normal';
+      p.energy = lc.energy;
+      p.proteinLow = lc.proteinLow; p.proteinHigh = lc.proteinHigh;
+    } else if (from === 'sarc') {
+      p.population = 'sarc';
+      p.energyLo = lc.energyLo; p.energyHi = lc.energyHi;
+      p.proteinLow = lc.proteinLow; p.proteinHigh = lc.proteinHigh;
+      p.sarcRisk = lc.sarcRisk;
+    } else if (from === 'post') {
+      p.population = 'post';
+      p.energy = lc.energy;
+      p.proteinLow = lc.proteinLow; p.proteinHigh = lc.proteinHigh;
+      p.texture = lc.texture;
+    }
+    appState.dietParams = p;
+    showModule('diet');
+  });
+}
+</script>
+</body>
+</html>
