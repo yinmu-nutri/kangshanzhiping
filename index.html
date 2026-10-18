@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="description" content="面向基层养老驿站与康养护理人员的轻量化营养筛查辅助工具。纯本地运行，无需联网。">
+<link rel="icon" href="data:,">
 <title>康膳智评 · 轻量化营养筛查辅助工具</title>
 <style>
 /* =========================================================
@@ -47,7 +48,7 @@ body {
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 0 20px;
+  padding: env(safe-area-inset-top, 0px) 20px 0;
   min-height: 60px;
   box-shadow: 0 1px 4px rgba(0,0,0,.04);
 }
@@ -355,6 +356,100 @@ footer.foot {
   border-top: 1px solid var(--border);
 }
 
+/* ===== 步骤条 ===== */
+.step-bar { display: flex; gap: 6px; flex-wrap: wrap; margin: 4px 0 18px; }
+.step-bar .step {
+  font-size: 13px; padding: 6px 10px; border-radius: 999px;
+  background: #eef4f9; color: var(--text-light);
+}
+.step-bar .step.active { background: var(--primary); color: #fff; font-weight: 600; }
+
+/* ===== 基本信息块 ===== */
+.info-block {
+  border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 14px 16px; margin-bottom: 18px; background: #fafcfe;
+}
+.info-block h3 { margin: 0 0 10px; font-size: 16px; color: var(--primary-dark); }
+.bmi-echo {
+  margin-top: 8px; font-size: 14px; padding: 10px 12px;
+  border-radius: var(--radius); background: #f0f6fb; border: 1px dashed var(--primary);
+}
+.bmi-echo strong { color: var(--primary-dark); }
+.bmi-echo .bmi-warn { color: var(--warn); font-weight: 600; }
+
+/* ===== 复选列表 ===== */
+.check-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; }
+.check-opt {
+  display: flex; align-items: flex-start; gap: 8px; padding: 10px 12px;
+  min-height: 44px; border: 1px solid var(--border); border-radius: var(--radius);
+  background: #fff; font-size: 14px; cursor: pointer;
+}
+.check-opt input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--primary); flex: none; }
+.check-opt.sel { border-color: var(--primary); background: #eef6fb; }
+
+/* ===== GLIM 诊断面板 ===== */
+.glim-panel {
+  margin-top: 18px; padding: 18px 20px; border: 1px solid var(--border);
+  border-radius: var(--radius); background: #fff;
+}
+.glim-panel h3 { margin-top: 0; }
+.criteria-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 10px 0; }
+.criteria-table th, .criteria-table td { border: 1px solid var(--border); padding: 8px 10px; text-align: left; vertical-align: top; }
+.criteria-table th { background: #f0f6fb; width: 32%; }
+.criteria-table .criteria-head { background: #e8f2fa; width: auto; }
+.criteria-table .met { color: var(--ok); font-weight: 700; }
+.criteria-table .notmet { color: var(--text-light); }
+.criteria-table .unassessed { color: var(--warn); }
+.criteria-detail { margin-top: 4px; font-size: 12.5px; color: var(--text-light); font-weight: 400; }
+.glim-conclusion {
+  margin-top: 12px; padding: 14px 16px; border-radius: var(--radius);
+  border-left: 6px solid var(--primary); background: #f8fbfe;
+}
+.glim-conclusion.positive { border-left-color: var(--bad); background: #fdf3f3; }
+.glim-conclusion.risk_only { border-left-color: var(--warn); background: #fef7f0; }
+.glim-conclusion.negative { border-left-color: var(--accent); background: #f2faf2; }
+.glim-conclusion.insufficient { border-left-color: var(--text-light); background: #f5f7fa; }
+.glim-conclusion h4 { margin-bottom: 6px; }
+
+/* ===== 警示框 ===== */
+.warning-box {
+  margin: 12px 0; padding: 12px 14px; border-radius: var(--radius);
+  border: 1px solid #ffd7b5; background: #fff8f0; font-size: 14px;
+}
+.warning-box strong { color: var(--warn); }
+.warning-box ul { margin: 6px 0 0 18px; }
+
+/* ===== 每餐蛋白信息 ===== */
+.meal-item .food { flex: 1; }
+.meal-meta { margin-top: 4px; font-size: 13px; color: var(--text-light); }
+.meal-meta .ok { color: var(--ok); font-weight: 600; }
+.meal-meta .low { color: var(--warn); font-weight: 600; }
+.meal-flag { font-size: 12px; color: var(--warn); margin-top: 2px; }
+
+/* ===== 演示入口 ===== */
+.demo-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+.demo-bar .btn { flex: 1 1 220px; }
+.badge-demo {
+  display: inline-block; font-size: 12px; padding: 2px 8px; border-radius: 999px;
+  background: #fff3cd; color: #8a6d3b; border: 1px solid #ffe08a;
+}
+
+/* ===== Toast ===== */
+#toast {
+  position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%) translateY(20px);
+  background: #2d3436; color: #fff; padding: 12px 18px; border-radius: 999px;
+  font-size: 14px; opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s;
+  z-index: 999; max-width: 90vw; text-align: center;
+}
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ===== 焦点可见 ===== */
+:focus-visible { outline: 3px solid #ffb300; outline-offset: 2px; }
+input:focus-visible, select:focus-visible { outline: 3px solid #ffb300; outline-offset: 1px; border-color: var(--primary); }
+
+/* ===== 打印辅助 ===== */
+.print-only { display: none; }
+
 /* ===== 响应式：平板 768px ===== */
 @media (max-width: 768px) {
   .brand small { display: none; }
@@ -368,15 +463,23 @@ footer.foot {
   .hero h1 { font-size: 24px; }
 }
 
-/* ===== 打印：仅显示报告 ===== */
+/* ===== 打印：仅显示报告，A4 分页 ===== */
+@page { size: A4 portrait; margin: 14mm 12mm; }
 @media print {
-  body { background: #fff; }
-  .nav-bar, .view-home, .view-mna, .view-calc, .view-help, footer.foot,
-  #diet-controls { display: none !important; }
-  .view-diet { display: block !important; }
-  main { max-width: 100%; padding: 0; }
+  body { background: #fff; color: #000; font-size: 11.5pt; line-height: 1.5; }
+  .nav-bar, footer.foot, #diet-controls, #view-home, #view-mna,
+  #view-calc, #view-help, .btn-row, #toast, .screen-only, .demo-bar { display: none !important; }
+  #view-diet { display: block !important; }
+  main { max-width: none; padding: 0; }
   .card { border: none; box-shadow: none; padding: 0; margin: 0; }
   #report { border: none; padding: 0; }
+  #report .report-head { break-after: avoid; }
+  #report .report-section { break-inside: avoid; page-break-inside: avoid; }
+  #report .meal-item, #report table.summary tr { break-inside: avoid; page-break-inside: avoid; }
+  #report h4 { break-after: avoid; }
+  #report thead { display: table-header-group; }
+  #report { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .print-only { display: block; }
 }
 </style>
 </head>
@@ -418,13 +521,69 @@ footer.foot {
         <div class="fdesc">适用人群、注意事项与文献来源</div>
       </div>
     </div>
+
+    <div class="card" style="margin-top:20px;">
+      <h2 style="font-size:18px;">演示模式</h2>
+      <p class="subtitle" style="margin-bottom:10px;">一键载入示例老人，完整演示「筛查 → GLIM 诊断 → 膳食方案 → 报告」。</p>
+      <div class="demo-bar">
+        <button class="btn" type="button" id="btn-demo-a">载入案例 A：典型营养不良</button>
+        <button class="btn btn-outline" type="button" id="btn-demo-b">载入案例 B：肥胖型（易漏诊）</button>
+      </div>
+      <p class="hint" style="font-size:12px;color:var(--text-light);margin-top:8px;">案例数据为演示用虚构信息，不涉及真实患者。</p>
+    </div>
   </section>
 
   <!-- ================= MNA-SF 筛查 ================= -->
   <section id="view-mna" class="view">
     <div class="card">
-      <h2>MNA-SF 老年营养筛查</h2>
-      <p class="subtitle">微型营养评定简表（MNA-SF）。请根据老年人近况逐题选择，满分 14 分。</p>
+      <h2>MNA-SF 老年营养筛查与 GLIM 诊断</h2>
+      <p class="subtitle">先完成 MNA-SF 初筛，再按 GLIM 两步法进行营养不良诊断评估。满分 14 分。</p>
+
+      <div class="step-bar" aria-label="评估流程">
+        <span class="step active">1 筛查</span>
+        <span class="step">2 诊断</span>
+        <span class="step">3 方案</span>
+        <span class="step">4 报告</span>
+      </div>
+
+      <div class="info-block">
+        <h3>基本信息（用于自动计算 BMI 与 GLIM 诊断）</h3>
+        <div class="form-grid">
+          <div class="form-field">
+            <label class="lbl" for="mna-name">姓名（可不填）</label>
+            <input type="text" id="mna-name" placeholder="如 王奶奶">
+          </div>
+          <div class="form-field">
+            <label class="lbl" for="mna-sex">性别</label>
+            <select id="mna-sex"><option value="female">女</option><option value="male">男</option></select>
+          </div>
+          <div class="form-field">
+            <label class="lbl" for="mna-age">年龄（岁）</label>
+            <input type="number" id="mna-age" min="0" max="120" placeholder="如 78">
+          </div>
+          <div class="form-field">
+            <label class="lbl" for="mna-height">身高（cm）</label>
+            <input type="number" id="mna-height" min="100" max="220" step="0.5" placeholder="如 158">
+          </div>
+          <div class="form-field">
+            <label class="lbl" for="mna-weight">体重（kg）</label>
+            <input type="number" id="mna-weight" min="20" max="200" step="0.1" placeholder="如 52">
+          </div>
+          <div class="form-field">
+            <label class="lbl" for="mna-usual-weight">既往体重（kg，可选）<span class="hint">用于计算体重下降百分比</span></label>
+            <input type="number" id="mna-usual-weight" min="20" max="200" step="0.1" placeholder="如 55.5">
+          </div>
+          <div class="form-field">
+            <label class="lbl" for="mna-weightloss">近 6 个月体重下降（kg，可选）</label>
+            <input type="number" id="mna-weightloss" min="0" max="50" step="0.1" placeholder="如 3.5">
+          </div>
+          <div class="form-field">
+            <label class="lbl" for="mna-calf">小腿围（cm，可选）<span class="hint">男 &lt;34 / 女 &lt;33 提示肌量减少风险</span></label>
+            <input type="number" id="mna-calf" min="15" max="60" step="0.5" placeholder="如 30">
+          </div>
+        </div>
+        <div class="bmi-echo" id="mna-bmi-echo" aria-live="polite">填写身高、体重、年龄后自动计算 BMI 并给出老年解读。</div>
+      </div>
 
       <div class="q-group">
         <div class="q-title">Q1. 过去 3 个月内，是否因食欲不振、消化问题、咀嚼或吞咽困难而减少进食量？</div>
@@ -473,46 +632,76 @@ footer.foot {
 
       <div class="q-group">
         <div class="q-title">Q6. 体重指数 BMI（kg/m²）？</div>
-        <div class="form-field" style="max-width:280px;margin-bottom:10px;">
-          <label class="lbl">计算方法</label>
+        <div class="form-field" style="max-width:320px;margin-bottom:10px;">
+          <label class="lbl" for="mna-bmi-mode">计算方法</label>
           <select id="mna-bmi-mode">
-            <option value="bmi">使用 BMI（推荐）</option>
+            <option value="auto">自动计算 BMI（推荐）</option>
+            <option value="manual">手动选择 BMI 区间</option>
             <option value="calf">无法获取 BMI，改用小腿围</option>
           </select>
         </div>
-        <div class="q-opt" id="mna-q6-bmi">
+        <div class="q-opt" id="mna-q6-bmi" style="display:none;">
           <label><input type="radio" name="q6" value="0">BMI &lt; 19（0 分）</label>
           <label><input type="radio" name="q6" value="1">19 ≤ BMI &lt; 21（1 分）</label>
           <label><input type="radio" name="q6" value="2">21 ≤ BMI &lt; 23（2 分）</label>
           <label><input type="radio" name="q6" value="3">BMI ≥ 23（3 分）</label>
         </div>
-        <div class="form-field" id="mna-q6-calf" style="display:none;max-width:280px;">
-          <label class="lbl">小腿围（cm）</label>
-          <input type="number" id="mna-calf" min="0" max="80" step="0.5" placeholder="如 32">
-          <span class="hint">小腿围 &lt; 31 cm 为 0 分，≥ 31 cm 为 3 分</span>
-        </div>
+        <p class="hint" id="mna-q6-auto-note" style="font-size:13px;color:var(--text-light);">自动计算：请先填写身高与体重。</p>
       </div>
 
       <button class="btn btn-block" id="btn-mna-result" type="button">查看结果</button>
 
       <!-- 筛查结果 -->
-      <div class="result" id="mna-result">
+      <div class="result" id="mna-result" aria-live="polite">
         <h4 id="mna-result-title">—</h4>
         <p>筛查总分：<span class="num" id="mna-result-score">—</span> / 14 分</p>
         <p id="mna-result-advice"></p>
         <div class="btn-row">
-          <button class="btn btn-green" id="btn-mna-to-diet" type="button">生成膳食建议 →</button>
+          <button class="btn" id="btn-glim-open" type="button">进入 GLIM 诊断 →</button>
+          <button class="btn btn-green" id="btn-mna-to-diet" type="button">跳过，直接生成膳食建议</button>
           <button class="btn btn-outline" id="btn-mna-reset" type="button">重新筛查</button>
+        </div>
+      </div>
+
+      <!-- GLIM 诊断 -->
+      <div class="glim-panel" id="glim-panel" style="display:none;">
+        <h3>第 2 步：GLIM 营养不良诊断</h3>
+        <p class="subtitle">GLIM 两步法：先完成有效筛查，再满足至少 1 项表型标准 + 至少 1 项病因标准。小腿围为肌量筛查替代指标。</p>
+
+        <div class="q-group">
+          <div class="q-title">病因标准补充信息</div>
+          <div class="check-list">
+            <label class="check-opt"><input type="checkbox" id="glim-reduced-intake"> 近 3 个月进食量减少 / 消化吸收障碍</label>
+            <label class="check-opt"><input type="checkbox" id="glim-disease-chronic"> 慢性疾病（心衰 / COPD / 肿瘤 / 糖尿病等）</label>
+            <label class="check-opt"><input type="checkbox" id="glim-disease-acute"> 近期急性疾病 / 感染 / 手术创伤</label>
+            <label class="check-opt"><input type="checkbox" id="glim-disease-ckd"> 慢性肾病（CKD）</label>
+            <label class="check-opt"><input type="checkbox" id="glim-disease-dysphagia"> 咀嚼 / 吞咽困难</label>
+            <label class="check-opt"><input type="checkbox" id="glim-disease-none"> 以上均无</label>
+          </div>
+          <p class="hint" style="font-size:12px;color:var(--text-light);margin-top:8px;">存在急性/慢性疾病、感染或组织损伤即满足 GLIM 疾病/炎症标准，不强制要求抽血化验。</p>
+        </div>
+
+        <p class="hint" id="glim-muscle-note" style="font-size:13px;color:var(--text-light);"></p>
+
+        <button class="btn btn-block" id="btn-glim-run" type="button">生成 GLIM 诊断结论</button>
+
+        <div id="glim-result" style="display:none;">
+          <table class="criteria-table" id="glim-criteria"></table>
+          <div class="glim-conclusion" id="glim-conclusion" aria-live="polite"></div>
+          <div class="btn-row">
+            <button class="btn btn-green" id="btn-glim-to-diet" type="button">生成膳食方案与报告 →</button>
+          </div>
         </div>
       </div>
 
       <!-- 专业依据折叠面板 -->
       <details class="panel">
-        <summary>MNA-SF 量表来源</summary>
+        <summary>筛查与诊断依据</summary>
         <div class="panel-body">
-          Rubenstein LZ, Harker JO, Salva A, Guigoz Y, Vellas B. Screening for undernutrition in geriatric practice:
-          developing the short-form mini-nutritional assessment (MNA-SF). <em>J Gerontol A Biol Sci Med Sci.</em>
-          2001;56(6):M366-72.
+          <p><strong>MNA-SF：</strong>Rubenstein LZ, Harker JO, Salva A, Guigoz Y, Vellas B. Screening for undernutrition in geriatric practice: developing the short-form mini-nutritional assessment (MNA-SF). <em>J Gerontol A Biol Sci Med Sci.</em> 2001;56(6):M366-72.</p>
+          <p><strong>GLIM：</strong>Cederholm T, Jensen GL, Correia MITD, et al. GLIM criteria for the diagnosis of malnutrition — A consensus report from the global clinical nutrition community. <em>Clin Nutr.</em> 2019;38(1):1-9.</p>
+          <p><strong>肌少症筛查：</strong>Chen LK, Woo J, Assantachai P, et al. Asian Working Group for Sarcopenia: 2019 consensus update on sarcopenia diagnosis and treatment. <em>J Am Med Dir Assoc.</em> 2020;21(3):300-307.</p>
+          <p><strong>老年营养治疗：</strong>《中国老年患者医学营养治疗指南（2026版）》，中华医学会肠外肠内营养学分会（CSPEN）。</p>
         </div>
       </details>
     </div>
@@ -570,6 +759,7 @@ footer.foot {
           <div class="kv">
             <div class="kv-item"><div class="k">每日总能量需求</div><div class="v" id="n-energy">—</div></div>
             <div class="kv-item"><div class="k">蛋白质建议摄入</div><div class="v" id="n-protein">—</div></div>
+            <div class="kv-item"><div class="k">体重指数 BMI</div><div class="v" id="n-bmi">—</div></div>
           </div>
           <p id="n-note"></p>
           <div class="btn-row">
@@ -626,6 +816,7 @@ footer.foot {
           <div class="kv">
             <div class="kv-item"><div class="k">每日能量需求</div><div class="v" id="s-energy">—</div></div>
             <div class="kv-item"><div class="k">蛋白质建议摄入</div><div class="v" id="s-protein">—</div></div>
+            <div class="kv-item"><div class="k">体重指数 BMI</div><div class="v" id="s-bmi">—</div></div>
           </div>
           <p id="s-note"></p>
           <div class="btn-row">
@@ -682,6 +873,21 @@ footer.foot {
               <option value="more5">下降 ≥5%</option>
             </select>
           </div>
+          <div class="form-field" style="grid-column:1/-1;">
+            <label class="lbl">合并应激状态（可多选，取最高系数）</label>
+            <div class="check-list">
+              <label class="check-opt"><input type="checkbox" id="st-none" checked> 无额外应激</label>
+              <label class="check-opt"><input type="checkbox" id="st-fever"> 发热（&gt;37℃）</label>
+              <label class="check-opt"><input type="checkbox" id="st-infection"> 感染 / 脓毒症</label>
+              <label class="check-opt"><input type="checkbox" id="st-surgery"> 大手术 / 创伤</label>
+              <label class="check-opt"><input type="checkbox" id="st-burns"> 烧伤</label>
+              <label class="check-opt"><input type="checkbox" id="st-ards"> ARDS</label>
+            </div>
+          </div>
+          <div class="form-field" id="p-temp-field" style="display:none;">
+            <label class="lbl" for="p-temp">当前体温（℃）<span class="hint">每升高 1℃ 增加 12%</span></label>
+            <input type="number" id="p-temp" min="34" max="43" step="0.1" placeholder="如 38.5">
+          </div>
         </div>
         <button class="btn btn-block" type="button" data-calc="post">开始计算</button>
 
@@ -690,6 +896,7 @@ footer.foot {
           <div class="kv">
             <div class="kv-item"><div class="k">每日能量需求</div><div class="v" id="p-energy">—</div></div>
             <div class="kv-item"><div class="k">蛋白质建议摄入</div><div class="v" id="p-protein">—</div></div>
+            <div class="kv-item"><div class="k">体重指数 BMI</div><div class="v" id="p-bmi">—</div></div>
           </div>
           <p id="p-note"></p>
           <div class="btn-row">
@@ -740,8 +947,12 @@ footer.foot {
           <input type="number" id="diet-age" min="0" max="120" placeholder="如 70">
         </div>
         <div class="form-field">
-          <label class="lbl">体重（kg）</label>
-          <input type="number" id="diet-weight" min="0" max="300" placeholder="如 60">
+          <label class="lbl" for="diet-weight">体重（kg）</label>
+          <input type="number" id="diet-weight" min="20" max="200" placeholder="如 60">
+        </div>
+        <div class="form-field">
+          <label class="lbl" for="diet-height">身高（cm，可选）</label>
+          <input type="number" id="diet-height" min="100" max="220" step="0.5" placeholder="如 160">
         </div>
         <div class="form-field" id="diet-texture-field" style="display:none;">
           <label class="lbl">当前进食情况</label>
@@ -761,37 +972,71 @@ footer.foot {
     <div id="report-wrap" style="display:none;">
       <div id="report">
         <div class="report-head">
-          <h3>康膳智评 · 营养评估报告</h3>
+          <h3>康膳智评 · 老年营养筛查与评估报告</h3>
           <div class="report-meta">
             <span id="r-name">姓名：—</span>
             <span id="r-date">日期：—</span>
             <span id="r-pop">人群：—</span>
+            <span id="r-demo-badge" class="badge-demo" style="display:none;">演示数据</span>
           </div>
         </div>
 
         <div class="report-section">
-          <h4>评估结果摘要</h4>
-          <table class="summary">
-            <tbody id="r-summary-body"></tbody>
-          </table>
+          <h4>一、基本信息与人体测量</h4>
+          <table class="summary"><tbody id="r-case"></tbody></table>
         </div>
 
         <div class="report-section">
-          <h4>膳食方案（示例）</h4>
+          <h4>二、营养风险筛查（MNA-SF）</h4>
+          <table class="summary"><tbody id="r-screening"></tbody></table>
+        </div>
+
+        <div class="report-section">
+          <h4>三、GLIM 营养不良诊断</h4>
+          <div id="r-glim"></div>
+        </div>
+
+        <div class="report-section">
+          <h4>四、肌少症 / 肌少性肥胖筛查</h4>
+          <div id="r-sarcopenia"></div>
+        </div>
+
+        <div class="report-section">
+          <h4>五、营养治疗目标</h4>
+          <table class="summary"><tbody id="r-targets"></tbody></table>
+        </div>
+
+        <div class="report-section">
+          <h4>六、膳食方案（示例）</h4>
           <div class="meal" id="r-meals"></div>
+          <p class="hint" id="r-meal-total" style="font-size:12px;color:var(--text-light);margin-top:8px;"></p>
         </div>
 
         <div class="report-section">
-          <h4>营养建议</h4>
-          <ul class="note-box" id="r-notes" style="margin-top:0;"></ul>
+          <h4>七、警示与注意事项</h4>
+          <div id="r-warnings"></div>
         </div>
 
-        <div class="disclaimer">
-          本工具仅供营养风险筛查和健康参考，不替代执业医师或临床营养师的诊断与治疗建议。如有异常，请及时转诊。
+        <div class="report-section">
+          <h4>八、监测与随访</h4>
+          <ul class="note-box" id="r-monitoring" style="margin-top:0;"></ul>
         </div>
+
+        <div class="report-section">
+          <h4>九、居家照护指导</h4>
+          <ul class="note-box" id="r-home" style="margin-top:0;"></ul>
+        </div>
+
+        <div class="report-section">
+          <h4>十、参考依据</h4>
+          <ul class="note-box" id="r-refs" style="margin-top:0;"></ul>
+        </div>
+
+        <div class="report-section" id="r-disclaimer"></div>
+        <div class="report-section print-only" id="r-sign"></div>
       </div>
 
-      <div class="btn-row">
+      <div class="btn-row screen-only">
         <button class="btn" id="btn-print" type="button">🖨 打印报告</button>
         <button class="btn btn-outline" id="btn-diet-reset" type="button">重新填写</button>
       </div>
@@ -804,7 +1049,7 @@ footer.foot {
       <h2>使用说明与专业依据</h2>
 
       <h3>工具用途</h3>
-      <p>用于基层养老驿站、康养机构、社区护理人员对老年人及康复人群进行初步营养风险筛查和营养测算。</p>
+      <p>用于基层养老驿站、康养机构、社区护理人员对老年人及康复人群进行初步营养风险筛查、GLIM 营养不良诊断辅助、营养测算和膳食方案生成。</p>
 
       <h3>适用人群</h3>
       <ul>
@@ -814,14 +1059,24 @@ footer.foot {
       </ul>
 
       <h3>不适用场景</h3>
-      <p>危重症患者、特殊代谢疾病患者、孕产妇等，应由专业营养师或医生评估。</p>
+      <p>危重症患者、特殊代谢疾病患者、孕产妇等，应由专业营养师或医生评估。慢性肾病患者的高蛋白目标需肾内科/营养师个体化调整。</p>
 
       <h3>专业依据列表</h3>
       <ul>
         <li><strong>MNA-SF：</strong>Rubenstein LZ, et al. J Gerontol A Biol Sci Med Sci. 2001;56(6):M366-72.</li>
+        <li><strong>GLIM 营养不良诊断：</strong>Cederholm T, et al. Clin Nutr. 2019;38(1):1-9.</li>
         <li><strong>肌少症筛查：</strong>AWGS 2019（Chen LK, et al. J Am Med Dir Assoc. 2020;21(3):300-307.）</li>
+        <li><strong>老年营养治疗：</strong>《中国老年患者医学营养治疗指南（2026版）》，中华医学会肠外肠内营养学分会（CSPEN）。</li>
         <li><strong>术后营养：</strong>ESPEN guideline（Weimann A, et al. Clin Nutr. 2017;36(3):623-650.）</li>
         <li><strong>膳食模式：</strong>中国居民膳食指南 2022</li>
+        <li><strong>会议要点：</strong>2026 天津市老年营养学术大会内容（内部学习资料，不作为正式指南引用）。</li>
+      </ul>
+
+      <h3>使用提示</h3>
+      <ul>
+        <li>小腿围是肌量筛查的替代指标，不能替代肌量测定；GLIM 结论为决策支持，不构成临床诊断。</li>
+        <li>老年 BMI 25–30 可能具有保护作用，本工具不推荐以减重为目标的限制性饮食。</li>
+        <li>每餐 25–30 g 优质蛋白为一般目标；低体重老人按每日总量分配，必要时使用口服营养补充（ONS）。</li>
       </ul>
 
       <h3>免责声明</h3>
@@ -835,600 +1090,2106 @@ footer.foot {
   本工具仅供营养风险筛查和健康参考，不替代执业医师或临床营养师的诊断与治疗建议。如有异常，请及时转诊。
 </footer>
 
+<div id="toast" role="status" aria-live="polite"></div>
+
 <script>
 /* =========================================================
-   康膳智评 - 全部交互逻辑（原生 JavaScript，无外部依赖）
+   康膳智评 V2 · 交互逻辑
+   单文件、零外部依赖、零网络请求
+   结构：配置 → 工具/纯函数 → 状态 → MNA/BMI/GLIM → 测算 → 膳食/报告 → 演示 → 事件
    ========================================================= */
+(function () {
+  'use strict';
 
-// ---------- 全局状态：模块间传递的评估参数 ----------
-var appState = {
-  mnaScore: null,          // MNA-SF 总分
-  mnaLevel: null,          // 营养状况等级（营养不良/有风险/正常）
-  dietParams: null         // 传递给膳食方案模块的参数
-};
+  /* =======================================================
+     1. 集中配置
+     ======================================================= */
+  var CONFIG = {
+    version: 'v2.0-2026-10',
+    elderlyAge: 65,
+    bmi: {
+      adultLow: 18.5,
+      adultOverweight: 24,
+      adultObese: 28,
+      elderlyLow: 20,
+      elderlyGoodHigh: 24.9,
+      elderlyProtectiveHigh: 29.9,
+      glimLowUnder70: 20,
+      glimLow70Plus: 22
+    },
+    energy: {
+      lowPerKg: 25,
+      highPerKg: 30,
+      feverBase: 37,
+      feverPerDegree: 0.12,
+      infection: 1.20,
+      surgery: 1.20,
+      burns: 1.75,
+      ards: 1.20
+    },
+    protein: {
+      adult: [0.8, 1.0],
+      elderly: [1.0, 1.2],
+      sarc: [1.2, 1.5],
+      post: {
+        gi: [1.6, 2.0],
+        ortho: [1.4, 1.8],
+        other: [1.2, 1.5]
+      },
+      perMealLow: 25,
+      perMealHigh: 30,
+      leucineLow: 2.5,
+      leucineHigh: 2.8
+    },
+    sarcopenia: {
+      calfMale: 34,
+      calfFemale: 33,
+      gripMale: 28,
+      gripFemale: 18,
+      speed: 1.0
+    },
+    mna: {
+      calfLow: 31
+    },
+    foods: {
+      milk:        { name: '牛奶',               amount: 200, unit: 'ml',         protein: 6.6,  leucine: 0.66 },
+      egg:         { name: '鸡蛋',               amount: 1,   unit: '个',         protein: 6.5,  leucine: 0.55 },
+      yogurt:      { name: '酸奶',               amount: 100, unit: 'g',          protein: 3.0,  leucine: 0.33 },
+      fish:        { name: '清蒸鱼',             amount: 100, unit: 'g',          protein: 20.0, leucine: 1.60 },
+      chicken:     { name: '鸡胸肉',             amount: 80,  unit: 'g',          protein: 24.8, leucine: 1.80 },
+      tofu:        { name: '北豆腐',             amount: 100, unit: 'g',          protein: 12.0, leucine: 0.90 },
+      oats:        { name: '燕麦粥',             amount: 1,   unit: '碗',         protein: 5.0,  leucine: 0.40 },
+      rice:        { name: '杂粮饭',             amount: 150, unit: 'g',          protein: 4.5,  leucine: 0.35 },
+      bread:       { name: '全麦面包',           amount: 1,   unit: '片',         protein: 3.0,  leucine: 0.22 },
+      veg:         { name: '绿叶蔬菜',           amount: 200, unit: 'g',          protein: 3.0,  leucine: 0.20 },
+      fruit:       { name: '水果',               amount: 1,   unit: '份',         protein: 0.8,  leucine: 0.05 },
+      nuts:        { name: '坚果',               amount: 10,  unit: 'g',          protein: 2.0,  leucine: 0.15 },
+      ons:         { name: '口服营养补充（ONS）', amount: 200, unit: 'ml（1 瓶）', protein: 20.0, leucine: 2.00 },
+      congee:      { name: '软粥',               amount: 1,   unit: '碗',         protein: 3.0,  leucine: 0.25 },
+      eggCustard:  { name: '蒸蛋羹',             amount: 1,   unit: '份',         protein: 7.0,  leucine: 0.60 },
+      fishPaste:   { name: '鱼肉泥',             amount: 80,  unit: 'g',          protein: 16.0, leucine: 1.30 },
+      tofuPudding: { name: '豆腐脑',             amount: 1,   unit: '碗',         protein: 6.0,  leucine: 0.45 },
+      ricePorridge:{ name: '菜肉粥',             amount: 1,   unit: '碗',         protein: 8.0,  leucine: 0.65 },
+      noodles:     { name: '烂面条',             amount: 1,   unit: '碗',         protein: 6.0,  leucine: 0.50 },
+      soymilk:     { name: '豆浆',               amount: 200, unit: 'ml',         protein: 6.0,  leucine: 0.50 }
+    }
+  };
 
-// ---------- 工具函数 ----------
-// 读取数字输入框的值，返回数字或 null（空/非法）
-function num(id) {
-  var v = document.getElementById(id).value.trim();
-  if (v === '') return null;
-  var n = parseFloat(v);
-  return (isNaN(n)) ? null : n;
-}
-// 四舍五入到指定位数
-function r1(n) { return Math.round(n * 10) / 10; }
-// 格式化范围，如 "1800~2200"
-function fmtRange(lo, hi) { return Math.round(lo) + '~' + Math.round(hi); }
-// 统一弹窗提示缺失必填项
-function need(cond, msg) {
-  if (!cond) { alert(msg); return true; }
-  return false;
-}
-// 当前日期，格式 YYYY-MM-DD
-function todayStr() {
-  var d = new Date();
-  var p = function (x) { return (x < 10 ? '0' : '') + x; };
-  return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
-}
+  var REFERENCES = [
+    'MNA-SF：Rubenstein LZ, Harker JO, Salva A, Guigoz Y, Vellas B. J Gerontol A Biol Sci Med Sci. 2001;56(6):M366-72.',
+    'GLIM：Cederholm T, Jensen GL, Correia MITD, et al. Clin Nutr. 2019;38(1):1-9.',
+    'AWGS 2019：Chen LK, Woo J, Assantachai P, et al. J Am Med Dir Assoc. 2020;21(3):300-307.',
+    '中国老年患者医学营养治疗指南（2026版），中华医学会肠外肠内营养学分会（CSPEN）。',
+    'ESPEN guideline: Clinical nutrition in surgery. Clin Nutr. 2017;36(3):623-650.',
+    '中国居民膳食指南 2022。',
+    '会议要点：2026 天津市老年营养学术大会（内部学习资料）。'
+  ];
 
-// ---------- 模块视图切换 ----------
-function showModule(id) {
-  var views = document.querySelectorAll('.view');
-  for (var i = 0; i < views.length; i++) views[i].classList.remove('active');
-  document.getElementById('view-' + id).classList.add('active');
+  var DISCLAIMER = '本报告为营养风险筛查与评估辅助，不构成临床诊断。营养治疗方案应由执业医师或临床营养师结合个体情况确认；如有异常，请及时转诊。';
 
-  var links = document.querySelectorAll('.nav-link');
-  for (var j = 0; j < links.length; j++) {
-    links[j].classList.toggle('active', links[j].getAttribute('data-view') === id);
+  var DEMO_A = {
+    label: '案例 A：典型营养不良',
+    name: '王秀兰', sex: 'female', age: 78, height: 158, weight: 52,
+    usual: 55.5, weightLoss: 3.5, calf: 30,
+    answers: { q1: 1, q2: 0, q3: 1, q4: 0, q5: 2 },
+    diseases: { chronic: false, acute: true, ckd: false, dysphagia: false }
+  };
+
+  var DEMO_B = {
+    label: '案例 B：肥胖型（易漏诊）',
+    name: '李国强', sex: 'male', age: 72, height: 170, weight: 82,
+    usual: 82, weightLoss: 0, calf: 33,
+    answers: { q1: 1, q2: 3, q3: 2, q4: 2, q5: 2 },
+    diseases: { chronic: true, acute: false, ckd: false, dysphagia: false }
+  };
+
+  /* =======================================================
+     2. 工具函数
+     ======================================================= */
+  function $(id) { return document.getElementById(id); }
+
+  function num(id) {
+    var el = $(id);
+    if (!el) return null;
+    var v = parseFloat(el.value);
+    return isNaN(v) ? null : v;
   }
-  // 进入膳食模块时带入参考参数
-  if (id === 'diet') applyDietParams();
-  window.scrollTo(0, 0);
-}
 
-// 顶部导航绑定
-var navLinks = document.querySelectorAll('.nav-link');
-for (var nl = 0; nl < navLinks.length; nl++) {
-  navLinks[nl].addEventListener('click', function () {
-    showModule(this.getAttribute('data-view'));
-  });
-}
+  function r1(n) { return Math.round(n * 10) / 10; }
+  function r2(n) { return Math.round(n * 100) / 100; }
+  function r0(n) { return Math.round(n); }
+  function clamp(n, lo, hi) { return Math.min(hi, Math.max(lo, n)); }
+  function fmtRange(lo, hi) { return r0(lo) + '~' + r0(hi); }
 
-// 首页功能卡片绑定
-var feats = document.querySelectorAll('.feature-card');
-for (var fc = 0; fc < feats.length; fc++) {
-  (function (el) {
-    var goto = function () { showModule(el.getAttribute('data-goto')); };
-    el.addEventListener('click', goto);
-    el.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goto(); }
+  function todayStr() {
+    var d = new Date();
+    var p = function (n) { return n < 10 ? '0' + n : '' + n; };
+    return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
+  }
+
+  function escapeHtml(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
     });
-  })(feats[fc]);
-}
+  }
 
-// 单选选项高亮（事件委托）：同组内切换 .sel 样式
-document.addEventListener('change', function (e) {
-  var t = e.target;
-  if (t && t.type === 'radio' && t.name) {
-    var radios = document.querySelectorAll('input[name="' + t.name + '"]');
+  var toastTimer = null;
+  function toast(msg) {
+    var t = $('toast');
+    if (!t) return;
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { t.classList.remove('show'); }, 3200);
+  }
+
+  function setValue(id, v) {
+    var el = $(id);
+    if (!el) return;
+    el.value = (v == null) ? '' : v;
+    el.dispatchEvent(new Event('input', { bubbles: true }));
+    el.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+
+  function checkRadio(name, value) {
+    var el = document.querySelector('input[name="' + name + '"][value="' + value + '"]');
+    if (!el) return;
+    el.checked = true;
+    el.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+
+  function setCheckbox(id, checked) {
+    var el = $(id);
+    if (!el) return;
+    el.checked = !!checked;
+    el.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+
+  function refreshCheckboxLabels() {
+    var boxes = document.querySelectorAll('.check-opt input[type="checkbox"]');
+    for (var i = 0; i < boxes.length; i++) {
+      var label = boxes[i].closest('label');
+      if (label) label.classList.toggle('sel', boxes[i].checked);
+    }
+  }
+
+  function refreshSegLabels() {
+    var radios = document.querySelectorAll('.seg input[type="radio"]');
     for (var i = 0; i < radios.length; i++) {
-      var l = radios[i].closest('label');
-      if (l) l.classList.toggle('sel', radios[i].checked);
+      var label = radios[i].closest('label');
+      if (label) label.classList.toggle('sel', radios[i].checked);
     }
   }
-});
 
-// =========================================================
-// 模块 2：MNA-SF 老年营养筛查
-// =========================================================
-
-// Q6 计算方法切换：BMI ↔ 小腿围
-document.getElementById('mna-bmi-mode').addEventListener('change', function () {
-  var isCalf = this.value === 'calf';
-  document.getElementById('mna-q6-bmi').style.display = isCalf ? 'none' : 'block';
-  document.getElementById('mna-q6-calf').style.display = isCalf ? 'flex' : 'none';
-});
-
-// 查看结果
-document.getElementById('btn-mna-result').addEventListener('click', function () {
-  var qs = ['q1', 'q2', 'q3', 'q4', 'q5'];
-  var names = { q1: '第 1 题（食欲/进食）', q2: '第 2 题（体重下降）', q3: '第 3 题（活动能力）',
-                q4: '第 4 题（心理压力/疾病）', q5: '第 5 题（神经心理）' };
-  var total = 0;
-  var i;
-  for (i = 0; i < qs.length; i++) {
-    var el = document.querySelector('input[name="' + qs[i] + '"]:checked');
-    if (!el) { alert('请完成 ' + names[qs[i]]); return; }
-    total += parseInt(el.value, 10);
-  }
-  // Q6
-  var mode = document.getElementById('mna-bmi-mode').value;
-  if (mode === 'bmi') {
-    var q6 = document.querySelector('input[name="q6"]:checked');
-    if (!q6) { alert('请完成第 6 题（BMI）'); return; }
-    total += parseInt(q6.value, 10);
-  } else {
-    var calf = num('mna-calf');
-    if (calf === null) { alert('请输入小腿围数值'); return; }
-    total += (calf < 31) ? 0 : 3;
+  function textureName(texture) {
+    if (texture === 'soft') return '软食';
+    if (texture === 'half') return '半流质';
+    if (texture === 'liquid') return '流质';
+    if (texture === 'nil') return '禁食';
+    return '正常饮食';
   }
 
-  // 结果分级
-  var level, advice;
-  if (total <= 7) {
-    level = '营养不良';
-    advice = '建议尽快转诊至临床营养科或社区营养门诊，由专业人员进一步评估并制定个体化营养支持方案。';
-  } else if (total <= 11) {
-    level = '有营养不良风险';
-    advice = '建议加强营养监测（体重、进食量），及时提供膳食建议，并建议咨询营养专业人员，预防营养不良发生。';
-  } else {
-    level = '营养状况正常';
-    advice = '继续保持健康均衡饮食，坚持适量活动，建议定期（如每季度）进行营养筛查。';
-  }
-
-  // 记录到全局状态，供"生成膳食建议"使用
-  appState.mnaScore = total;
-  appState.mnaLevel = level;
-
-  var res = document.getElementById('mna-result');
-  res.className = 'result ' + (level === '营养不良' ? 'bad' : (level === '有营养不良风险' ? 'warn' : 'ok')) + ' show';
-  document.getElementById('mna-result-title').textContent = '评估结果：' + level;
-  document.getElementById('mna-result-score').textContent = total;
-  document.getElementById('mna-result-advice').textContent = advice;
-
-  // 结果区滚入视野
-  res.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-});
-
-// 重新筛查：清空所有选项
-document.getElementById('btn-mna-reset').addEventListener('click', function () {
-  var radios = document.querySelectorAll('#view-mna input[type="radio"]');
-  for (var i = 0; i < radios.length; i++) radios[i].checked = false;
-  var labels = document.querySelectorAll('#view-mna .q-opt label');
-  for (var j = 0; j < labels.length; j++) labels[j].classList.remove('sel');
-  document.getElementById('mna-result').className = 'result';
-  document.getElementById('mna-calf').value = '';
-  document.getElementById('mna-bmi-mode').value = 'bmi';
-  document.getElementById('mna-q6-bmi').style.display = 'block';
-  document.getElementById('mna-q6-calf').style.display = 'none';
-  appState.mnaScore = null;
-  appState.mnaLevel = null;
-  window.scrollTo(0, 0);
-});
-
-// "生成膳食建议"：把 MNA 结果带入膳食模块
-document.getElementById('btn-mna-to-diet').addEventListener('click', function () {
-  if (appState.mnaScore === null) return;
-  // 携带 MNA 结果，人群默认按老年人处理（可手动切换）
-  appState.dietParams = {
-    population: 'sarc',
-    energy: null,
-    protein: null,
-    mnaScore: appState.mnaScore,
-    mnaLevel: appState.mnaLevel,
-    from: 'mna'
-  };
-  showModule('diet');
-});
-
-// =========================================================
-// 模块 3：分人群营养测算
-// =========================================================
-
-// 人群切换
-var popInputs = document.querySelectorAll('input[name="calc-pop"]');
-for (var pi = 0; pi < popInputs.length; pi++) {
-  popInputs[pi].addEventListener('change', function () {
-    var v = this.value;
-    var map = { normal: 'form-normal', sarc: 'form-sarc', post: 'form-post' };
-    var forms = document.querySelectorAll('.sub-form');
-    for (var i = 0; i < forms.length; i++) forms[i].classList.remove('show');
-    document.getElementById(map[v]).classList.add('show');
-    // 高亮分段按钮
-    var labels = document.querySelectorAll('#calc-seg label');
-    for (var j = 0; j < labels.length; j++) labels[j].classList.remove('sel');
-    var l = this.closest('label');
-    if (l) l.classList.add('sel');
-    window.scrollTo(0, 0);
-  });
-}
-
-// Mifflin-St Jeor 基础能量消耗（BEE）
-function mifflin(sex, w, h, age) {
-  return 10 * w + 6.25 * h - 5 * age + (sex === 'male' ? 5 : -161);
-}
-
-// ---- A. 普通人 ----
-document.querySelector('[data-calc="normal"]').addEventListener('click', function () {
-  var sex = document.getElementById('n-sex').value;
-  var age = num('n-age'), h = num('n-height'), w = num('n-weight');
-  if (need(age !== null, '请输入年龄') || need(h !== null, '请输入身高') || need(w !== null, '请输入体重')) return;
-  if (need(age > 0 && h > 0 && w > 0, '年龄、身高、体重须大于 0')) return;
-
-  var af = parseFloat(document.getElementById('n-activity').value);
-  var bee = mifflin(sex, w, h, age);
-  var tee = bee * af;
-  var pLow = 0.8 * w, pHigh = 1.0 * w;
-
-  document.getElementById('n-energy').textContent = Math.round(tee) + ' kcal';
-  document.getElementById('n-protein').textContent = r1(pLow) + '~' + r1(pHigh) + ' g';
-  document.getElementById('n-note').textContent =
-    '依据 Mifflin-St Jeor 公式计算基础能量消耗 ' + Math.round(bee) + ' kcal，乘以活动系数 ' + af +
-    ' 得到每日总能量需求。蛋白质按 0.8~1.0 g/kg 体重建议。';
-
-  // 存结果，供生成膳食方案
-  appState.lastCalc = { population: 'normal', energy: tee, proteinLow: pLow, proteinHigh: pHigh, sex: sex, weight: w, age: age };
-
-  var res = document.getElementById('res-normal');
-  res.className = res.className.replace('show', '') + ' show';
-  res.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-});
-
-// ---- B. 老年人肌少症 ----
-document.querySelector('[data-calc="sarc"]').addEventListener('click', function () {
-  var sex = document.getElementById('s-sex').value;
-  var age = num('s-age'), h = num('s-height'), w = num('s-weight');
-  if (need(age !== null, '请输入年龄') || need(h !== null, '请输入身高') || need(w !== null, '请输入体重')) return;
-  if (need(age > 0 && h > 0 && w > 0, '年龄、身高、体重须大于 0')) return;
-
-  // ---- 肌少症风险筛查（AWGS 2019）----
-  var calf = num('s-calf'), grip = num('s-grip'), speed = num('s-speed');
-  var risks = [];
-  if (calf !== null) {
-    var calfTh = sex === 'male' ? 34 : 33;
-    if (calf < calfTh) risks.push('小腿围 ' + calf + ' cm（低于' + (sex === 'male' ? '男' : '女') + '性参考 ' + calfTh + ' cm）');
-  }
-  if (grip !== null) {
-    var gripTh = sex === 'male' ? 28 : 18;
-    if (grip < gripTh) risks.push('握力 ' + grip + ' kg（低于' + (sex === 'male' ? '男' : '女') + '性参考 ' + gripTh + ' kg）');
-  }
-  if (speed !== null && speed < 1.0) risks.push('步速 ' + speed + ' m/s（低于 1.0 m/s）');
-
-  var riskText;
-  if (risks.length > 0) {
-    riskText = '以下指标提示异常：' + risks.join('；') + '。可能存在肌少症风险，建议进一步评估（如肌量测定）。';
-  } else if (calf === null && grip === null && speed === null) {
-    riskText = '未填写筛查指标，暂不进行肌少症风险判断，以下仅提供营养建议。';
-  } else {
-    riskText = '已填写的筛查指标均在参考范围内，未见明显肌少症风险。';
-  }
-
-  // ---- 营养测算：25~30 kcal/kg，蛋白质 1.2~1.5 g/kg ----
-  var actFactor = parseFloat(document.getElementById('s-activity').value); // 25 / 27 / 30
-  var energyLo = 25 * w, energyHi = 30 * w;
-  var energyRec = actFactor * w;
-  var pLow = 1.2 * w, pHigh = 1.5 * w;
-
-  document.getElementById('s-title').textContent = risks.length > 0 ? '肌少症风险筛查：提示风险' : '肌少症风险筛查';
-  document.getElementById('s-risk').textContent = riskText;
-  document.getElementById('s-energy').textContent = fmtRange(energyLo, energyHi) + ' kcal（按 ' + actFactor + ' kcal/kg 取值）';
-  document.getElementById('s-protein').textContent = r1(pLow) + '~' + r1(pHigh) + ' g';
-  document.getElementById('s-note').innerHTML =
-    '能量需求按 25~30 kcal/kg 体重计算，根据活动情况微调。蛋白质建议 1.2~1.5 g/kg 体重。' +
-    '建议：强调优质蛋白摄入（如乳清蛋白、瘦肉、蛋、豆制品），补充维生素 D（800~1000 IU/天，遵医嘱）' +
-    '和富含亮氨酸的食物（牛肉、鸡肉、乳制品、大豆）。';
-
-  appState.lastCalc = {
-    population: 'sarc', energyLo: energyLo, energyHi: energyHi, energyRec: energyRec,
-    proteinLow: pLow, proteinHigh: pHigh, sex: sex, weight: w, age: age,
-    sarcRisk: risks.length > 0
-  };
-
-  var res = document.getElementById('res-sarc');
-  res.className = res.className.replace('show', '') + ' show';
-  res.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-});
-
-// ---- C. 术后康复 ----
-document.querySelector('[data-calc="post"]').addEventListener('click', function () {
-  var sex = document.getElementById('p-sex').value;
-  var age = num('p-age'), h = num('p-height'), w = num('p-weight');
-  if (need(age !== null, '请输入年龄') || need(h !== null, '请输入身高') || need(w !== null, '请输入体重')) return;
-  if (need(age > 0 && h > 0 && w > 0, '年龄、身高、体重须大于 0')) return;
-
-  var surgery = document.getElementById('p-surgery').value;
-  var dietType = document.getElementById('p-diet').value;
-  var wc = document.getElementById('p-weightchange').value;
-
-  // 应激系数：胃肠 1.1~1.2 取 1.15，骨科 1.2~1.3 取 1.25，其他 1.1
-  var stressMap = { gi: 1.15, ortho: 1.25, other: 1.1 };
-  var stress = stressMap[surgery];
-
-  // 蛋白范围：按手术类型调整，胃肠取较高值
-  var pLow, pHigh;
-  if (surgery === 'gi') { pLow = 1.6; pHigh = 2.0; }
-  else if (surgery === 'ortho') { pLow = 1.4; pHigh = 1.8; }
-  else { pLow = 1.2; pHigh = 1.5; }
-
-  // 能量：BEE × 应激系数；若体重下降≥5% 或流质/禁食，再增加 15%
-  var bee = mifflin(sex, w, h, age);
-  var energy = bee * stress;
-  var boosted = (wc === 'more5' || dietType === 'liquid' || dietType === 'nil');
-  var boostNote = '';
-  if (boosted) { energy *= 1.15; boostNote = '（因体重下降≥5% 或当前为流质/禁食饮食，能量需求额外增加约 15%）'; }
-
-  var dietNote;
-  if (dietType === 'nil') {
-    dietNote = '当前为禁食状态，建议在医生或营养师指导下逐步恢复经口进食，必要时考虑肠内/肠外营养支持。';
-  } else if (dietType === 'liquid') {
-    dietNote = '当前为流质饮食，建议在医生或营养师指导下逐步过渡至半流质/软食，可考虑口服营养补充（ONS）。';
-  } else if (dietType === 'half') {
-    dietNote = '当前为半流质饮食，注意少量多餐，在耐受前提下逐步向软食/正常饮食过渡。';
-  } else {
-    dietNote = '保持均衡饮食，保证优质蛋白与能量摄入，促进伤口愈合与康复。';
-  }
-
-  document.getElementById('p-energy').textContent = Math.round(energy) + ' kcal' + boostNote;
-  document.getElementById('p-protein').textContent = r1(pLow * w) + '~' + r1(pHigh * w) + ' g';
-  document.getElementById('p-note').textContent =
-    '基础能量需求按 Mifflin-St Jeor 公式计算，乘以手术应激系数 ' + stress + '。' + dietNote;
-
-  appState.lastCalc = {
-    population: 'post', energy: energy, proteinLow: pLow * w, proteinHigh: pHigh * w,
-    sex: sex, weight: w, age: age, texture: dietType, weightChange: wc
-  };
-
-  var res = document.getElementById('res-post');
-  res.className = res.className.replace('show', '') + ' show';
-  res.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-});
-
-// =========================================================
-// 模块 4：膳食方案与简易评估报告
-// =========================================================
-
-// 人群变化时显示/隐藏"当前进食情况"（术后康复）
-document.getElementById('diet-pop').addEventListener('change', function () {
-  var isPost = this.value === 'post';
-  document.getElementById('diet-texture-field').style.display = isPost ? 'flex' : 'none';
-});
-
-// 进入膳食模块时，把其它模块的结果带入参考参数区
-function applyDietParams() {
-  var ref = document.getElementById('diet-ref');
-  var p = appState.dietParams;
-
-  // 重置"重新填写"后不带参数时，仅隐藏参考框
-  if (!p) { ref.className = 'result ok'; ref.style.display = 'none'; return; }
-
-  // 若已有带参计算，预填人群
-  if (p.population) document.getElementById('diet-pop').value = p.population;
-  document.getElementById('diet-texture-field').style.display = p.population === 'post' ? 'flex' : 'none';
-
-  var html = '<h4 style="margin-bottom:6px;">已带入的评估参数</h4>';
-  if (p.from === 'mna') {
-    html += '<p>MNA-SF 得分：<strong>' + p.mnaScore + '</strong> / 14 分（' + p.mnaLevel + '）。';
-    html += '该筛查面向老年人，已默认选择「老年人肌少症」人群，可手动切换。</p>';
-  } else {
-    html += '<p>人群：<strong>' + popName(p.population) + '</strong>；';
-    if (p.energy) html += '能量需求：<strong>' + Math.round(p.energy) + '</strong> kcal/日；';
-    if (p.energyLo && p.energyHi) html += '能量需求：<strong>' + fmtRange(p.energyLo, p.energyHi) + '</strong> kcal/日；';
-    html += '蛋白质：<strong>' + r1(p.proteinLow) + '~' + r1(p.proteinHigh) + '</strong> g/日。';
-    html += '下方三餐示例已按此需求缩放分量。</p>';
-  }
-  ref.innerHTML = html;
-  ref.style.display = 'block';
-}
-function popName(v) {
-  var m = { normal: '普通人', sarc: '老年人肌少症', post: '术后康复' };
-  return m[v] || v;
-}
-
-// 生成膳食方案与报告
-document.getElementById('btn-gen-diet').addEventListener('click', function () {
-  var pop = document.getElementById('diet-pop').value;
-  var name = document.getElementById('diet-name').value.trim();
-  var sex = document.getElementById('diet-sex').value;
-  var age = num('diet-age'), w = num('diet-weight');
-
-  if (need(age !== null, '请输入年龄') || need(w !== null, '请输入体重')) return;
-  if (need(age > 0 && w > 0, '年龄、体重须大于 0')) return;
-
-  var p = appState.dietParams;
-  var params = { population: pop, name: name, age: age, weight: w, sex: sex };
-
-  // 能量与蛋白质：优先用带入参数；否则按人群估算
-  if (p && (p.from === 'mna' || p.population === pop)) {
-    if (p.mnaScore !== null) params.mnaScore = p.mnaScore;
-    if (p.energy !== null) params.energy = p.energy;
-    if (p.energyLo && p.energyHi) { params.energyLo = p.energyLo; params.energyHi = p.energyHi; }
-    params.proteinLow = p.proteinLow; params.proteinHigh = p.proteinHigh;
-    params.sarcRisk = p.sarcRisk;
-    params.texture = p.texture;
-  } else {
-    // 独立估算（无带入参数或人群已切换）
-    params = estimateParams(params, pop);
-  }
-  // 术后人群的食物质地：以表单选择为准
-  if (pop === 'post') params.texture = document.getElementById('diet-texture').value;
-
-  renderReport(params);
-});
-
-// 独立使用时按人群估算能量/蛋白质（用于三餐分量缩放）
-function estimateParams(params, pop) {
-  var sex = params.sex, w = params.weight, h = 165, age = params.age;
-  if (pop === 'normal') {
-    var bee = mifflin(sex, w, h, age);
-    params.energy = bee * 1.375;          // 默认按轻度活动
-    params.proteinLow = 0.8 * w; params.proteinHigh = 1.0 * w;
-  } else if (pop === 'sarc') {
-    params.energyLo = 25 * w; params.energyHi = 30 * w;
-    params.proteinLow = 1.2 * w; params.proteinHigh = 1.5 * w;
-  } else if (pop === 'post') {
-    params.energy = mifflin(sex, w, h, age) * 1.15;
-    params.proteinLow = 1.4 * w; params.proteinHigh = 1.8 * w;
-  }
-  return params;
-}
-
-// 根据人群生成三餐示例
-function buildMeals(pop, params) {
-  var meals = [];
-  function add(time, food) { meals.push({ time: time, food: food }); }
-
-  // 计算分量缩放提示（仅普通/肌少症按能量大致调整主食）
-  var energyRef = params.energy || ((params.energyLo + params.energyHi) / 2) || 1800;
-  var portionNote = '';
-  if (energyRef >= 2200) portionNote = '（能量需求较高，主食可加半碗）';
-  else if (energyRef < 1500) portionNote = '（能量需求偏低，注意少量多餐）';
-
-  if (pop === 'normal') {
-    add('早餐', '燕麦粥 1 碗 + 水煮蛋 1 个 + 牛奶 200 ml' + portionNote);
-    add('上午加餐', '水果 1 份（如苹果 1 个）');
-    add('午餐', '米饭 1 碗（约 150 g）+ 清蒸鱼 100 g + 炒青菜 200 g');
-    add('下午加餐', '酸奶 1 杯 + 核桃 2 颗');
-    add('晚餐', '杂粮饭 1 碗 + 豆腐 100 g + 瘦肉 50 g + 蔬菜汤');
-  } else if (pop === 'sarc') {
-    add('早餐', '牛奶燕麦粥 1 碗 + 水煮蛋 2 个 + 全麦面包 1 片');
-    add('上午加餐', '酸奶 1 杯 + 坚果 1 小把');
-    add('午餐', '杂粮饭 1 碗 + 清蒸鱼 120 g + 西兰花炒瘦肉 100 g');
-    add('下午加餐', '香蕉 1 根 + 鸡蛋 1 个');
-    add('晚餐', '杂粮饭 1 碗 + 豆腐 100 g + 鸡胸肉 80 g + 绿叶蔬菜 200 g');
-    add('睡前加餐', '牛奶 1 杯（必要时）');
-  } else if (pop === 'post') {
-    var t = params.texture || 'normal';
-    if (t === 'liquid') {
-      add('早餐', '米汤 1 碗 + 藕粉 1 杯');
-      add('上午加餐', '牛奶 200 ml（如无乳糖不耐）');
-      add('午餐', '去油鱼汤/鸡汤 1 碗 + 蔬菜汁 1 杯');
-      add('下午加餐', '豆浆 200 ml');
-      add('晚餐', '滤渣烂粥 1 碗 + 蛋花汤 1 碗');
-    } else if (t === 'half') {
-      add('早餐', '白粥 1 碗 + 蒸蛋羹 1 份');
-      add('上午加餐', '酸奶 1 杯');
-      add('午餐', '烂面条 1 碗 + 鱼肉泥 80 g + 煮烂碎蔬菜');
-      add('下午加餐', '藕粉 1 杯');
-      add('晚餐', '菜肉粥 1 碗 + 豆腐脑 1 碗');
-    } else { // soft / normal
-      add('早餐', '软粥 1 碗 + 水煮蛋 1 个 + 牛奶 200 ml');
-      add('上午加餐', '香蕉 1 根');
-      add('午餐', '软米饭 1 碗 + 清蒸鱼 100 g + 煮烂蔬菜 200 g');
-      add('下午加餐', '酸奶 1 杯');
-      add('晚餐', '软米饭/馒头 + 蒸蛋 1 份 + 肉末豆腐 100 g + 蔬菜汤');
+  function validRange(v, lo, hi, label) {
+    if (v == null || v < lo || v > hi) {
+      alert(label + '需在 ' + lo + '~' + hi + ' 之间');
+      return false;
     }
+    return true;
   }
-  return meals;
-}
 
-// 渲染报告
-function renderReport(params) {
-  var p = params;
+  /* =======================================================
+     3. 纯函数：BMI / MNA / GLIM / 肌少症 / 应激 / 目标
+     ======================================================= */
+  function computeBMI(weightKg, heightCm) {
+    if (!(weightKg > 0) || !(heightCm > 0)) return null;
+    return Math.round((weightKg / Math.pow(heightCm / 100, 2)) * 10) / 10;
+  }
 
-  // 顶部信息
-  document.getElementById('r-name').textContent = '姓名：' + (p.name || '—');
-  document.getElementById('r-date').textContent = '日期：' + todayStr();
-  document.getElementById('r-pop').textContent = '人群：' + popName(p.population);
+  function interpretBMI(bmi, age) {
+    if (bmi == null || isNaN(bmi)) {
+      return { code: 'unknown', label: '未评估', adviceNoWeightLoss: false };
+    }
+    var elderly = (age == null) ? true : (age >= CONFIG.elderlyAge);
+    if (elderly) {
+      if (bmi < CONFIG.bmi.elderlyLow) {
+        return { code: 'elderly_low', label: '偏低 · 营养不良风险增加', adviceNoWeightLoss: false };
+      }
+      if (bmi <= CONFIG.bmi.elderlyGoodHigh) {
+        return { code: 'elderly_fit', label: '适宜范围', adviceNoWeightLoss: false };
+      }
+      if (bmi <= CONFIG.bmi.elderlyProtectiveHigh) {
+        return { code: 'elderly_protective', label: '偏高 · 老年保护性区间', adviceNoWeightLoss: true };
+      }
+      return { code: 'elderly_obese', label: '肥胖 · 需个体化评估', adviceNoWeightLoss: true };
+    }
+    if (bmi < CONFIG.bmi.adultLow) return { code: 'adult_low', label: '偏瘦', adviceNoWeightLoss: false };
+    if (bmi < CONFIG.bmi.adultOverweight) return { code: 'adult_normal', label: '正常', adviceNoWeightLoss: false };
+    if (bmi < CONFIG.bmi.adultObese) return { code: 'adult_overweight', label: '超重', adviceNoWeightLoss: false };
+    return { code: 'adult_obese', label: '肥胖', adviceNoWeightLoss: false };
+  }
 
-  // 摘要表格
-  var rows = '';
-  rows += '<tr><th>人群类型</th><td>' + popName(p.population) + '</td></tr>';
-  if (p.mnaScore !== null && p.mnaScore !== undefined) {
-    rows += '<tr><th>MNA-SF 得分</th><td>' + p.mnaScore + ' / 14 分（' + (p.mnaLevel || '—') + '）</td></tr>';
+  function glimBmiGapNote(bmi, age) {
+    if (bmi == null) return '';
+    var cutoff = (age == null || age >= 70) ? CONFIG.bmi.glimLow70Plus : CONFIG.bmi.glimLowUnder70;
+    var generalLow = (age == null || age >= CONFIG.elderlyAge) ? CONFIG.bmi.elderlyLow : CONFIG.bmi.adultLow;
+    if (bmi >= generalLow && bmi < cutoff) {
+      return '低于 GLIM 亚洲低 BMI 阈值 <' + cutoff + '，营养不良诊断时按 GLIM 判定';
+    }
+    return '';
   }
-  if (p.energy !== null && p.energy !== undefined) {
-    rows += '<tr><th>每日能量需求</th><td>' + Math.round(p.energy) + ' kcal</td></tr>';
-  } else if (p.energyLo && p.energyHi) {
-    rows += '<tr><th>每日能量需求</th><td>' + fmtRange(p.energyLo, p.energyHi) + ' kcal</td></tr>';
-  }
-  if (p.proteinLow && p.proteinHigh) {
-    rows += '<tr><th>蛋白质建议</th><td>' + r1(p.proteinLow) + '~' + r1(p.proteinHigh) + ' g/日</td></tr>';
-  }
-  if (p.sarcRisk) rows += '<tr><th>肌少症提示</th><td>存在肌少症风险，建议进一步评估</td></tr>';
-  if (p.population === 'post' && p.texture) {
-    var tn = { normal: '正常饮食', soft: '软食', half: '半流质', liquid: '流质' };
-    rows += '<tr><th>当前进食情况</th><td>' + (tn[p.texture] || p.texture) + '</td></tr>';
-  }
-  document.getElementById('r-summary-body').innerHTML = rows;
 
-  // 三餐
-  var meals = buildMeals(p.population, p);
-  var mealHtml = '';
-  for (var i = 0; i < meals.length; i++) {
-    mealHtml += '<div class="meal-item"><div class="time">' + meals[i].time + '</div><div class="food">' + meals[i].food + '</div></div>';
+  function mnaQ6Score(bmi) {
+    if (bmi == null) return null;
+    if (bmi < 19) return 0;
+    if (bmi < 21) return 1;
+    if (bmi < 23) return 2;
+    return 3;
   }
-  document.getElementById('r-meals').innerHTML = mealHtml;
 
-  // 营养建议
-  var notes = [];
-  if (p.population === 'sarc') {
-    notes.push('每餐都要安排优质蛋白，可加餐（如酸奶、坚果），避免长时间空腹。');
-    notes.push('优先选择富含亮氨酸的食物：牛肉、鸡肉、乳制品、大豆制品。');
-    notes.push('建议在医生指导下补充维生素 D（800~1000 IU/天）与钙。');
-    notes.push('配合适量抗阻运动（如弹力带训练），对维持肌量有益。');
-  } else if (p.population === 'post') {
-    if (p.texture === 'liquid') {
-      notes.push('当前为流质饮食，建议在医生或营养师指导下逐步过渡至半流质/软食。');
-      notes.push('可考虑口服营养补充（ONS）以满足高蛋白需求。');
-      notes.push('少量多餐，每次进食量不宜过大。');
-    } else if (p.texture === 'half') {
-      notes.push('当前为半流质饮食，注意少食多餐，逐步向软食过渡。');
-      notes.push('保证蛋白质摄入（鱼、蛋、奶、豆制品），促进伤口愈合。');
+  function screeningInfo(total) {
+    if (total <= 7) {
+      return {
+        level: '营养不良',
+        advice: '筛查提示营养不良，建议进入 GLIM 诊断，并尽快由临床营养专业人员评估。',
+        cls: 'bad'
+      };
+    }
+    if (total <= 11) {
+      return {
+        level: '有营养不良风险',
+        advice: '筛查提示营养不良风险，建议进一步评估并制定营养干预方案。',
+        cls: 'warn'
+      };
+    }
+    return {
+      level: '营养状况正常',
+      advice: '本次筛查未提示营养不良风险；如临床情况变化，建议 1~3 个月后复查。',
+      cls: 'ok'
+    };
+  }
+
+  function deriveSarcopenia(sex, calf, grip, speed, bmi) {
+    var flags = {};
+    var parts = [];
+    var assessed = false;
+    var calfCut = (sex === 'male') ? CONFIG.sarcopenia.calfMale : CONFIG.sarcopenia.calfFemale;
+    var gripCut = (sex === 'male') ? CONFIG.sarcopenia.gripMale : CONFIG.sarcopenia.gripFemale;
+
+    if (calf != null) {
+      assessed = true;
+      flags.calf = calf < calfCut;
+      parts.push('小腿围 ' + calf + ' cm（AWGS 参考阈值 <' + calfCut + ' cm）');
+    }
+    if (grip != null) {
+      assessed = true;
+      flags.grip = grip < gripCut;
+      parts.push('握力 ' + grip + ' kg（阈值 <' + gripCut + ' kg）');
+    }
+    if (speed != null) {
+      assessed = true;
+      flags.speed = speed < CONFIG.sarcopenia.speed;
+      parts.push('步速 ' + speed + ' m/s（阈值 <1.0 m/s）');
+    }
+
+    var risk = !!(flags.calf || flags.grip || flags.speed);
+    var so = !!(bmi != null && bmi >= 24 && risk);
+    return {
+      screened: assessed,
+      flags: flags,
+      risk: risk,
+      suspectedSarcopenicObesity: so,
+      note: parts.length ? parts.join('；') : '未提供小腿围、握力或步速，肌少症风险未评估。'
+    };
+  }
+
+  function deriveGlim(input) {
+    var age = (input.age == null) ? CONFIG.elderlyAge : input.age;
+    var sex = input.sex || 'female';
+    var bmi = input.bmi;
+    var calf = input.calf;
+    var weight = input.weight;
+    var usual = input.usualWeight;
+    var wlKg = input.weightLossKg;
+    var q2 = input.q2;
+    var q1 = input.q1;
+
+    /* --- 表型 1：非自愿体重下降 --- */
+    var wlAssessed = false;
+    var wlMet = false;
+    var wlSevere = false;
+    var wlPct = null;
+    var wlDetail = '';
+
+    if (wlKg != null && wlKg >= 0 && weight != null) {
+      var base = (usual != null && usual > weight) ? usual : (weight + wlKg);
+      if (wlKg === 0) {
+        wlAssessed = true;
+        wlDetail = '近期体重稳定';
+      } else if (base > 0) {
+        wlPct = wlKg / base * 100;
+        wlAssessed = true;
+        wlMet = wlPct >= 5;
+        wlSevere = wlPct >= 10;
+        wlDetail = '近 6 个月下降 ' + r1(wlKg) + ' kg（' + r1(wlPct) + '%）';
+      }
+    }
+
+    if (!wlAssessed && q2 != null) {
+      if (q2 === 0) {
+        wlAssessed = true;
+        wlMet = true;
+        wlDetail = 'MNA Q2：体重下降 >3 kg（代理指标，幅度未知）';
+      } else if (q2 === 2) {
+        wlAssessed = true;
+        wlMet = false;
+        wlDetail = 'MNA Q2：体重下降 1~3 kg，未达到 5% 阈值';
+      } else if (q2 === 3) {
+        wlAssessed = true;
+        wlMet = false;
+        wlDetail = 'MNA Q2：无体重下降';
+      } else {
+        wlAssessed = false;
+        wlDetail = '体重下降幅度未知';
+      }
+    }
+    if (!wlAssessed) wlDetail = '未提供体重下降信息';
+
+    /* --- 表型 2：低 BMI（GLIM 亚洲阈值） --- */
+    var bmiCutoff = (age >= 70) ? CONFIG.bmi.glimLow70Plus : CONFIG.bmi.glimLowUnder70;
+    var bmiAssessed = bmi != null;
+    var bmiMet = bmiAssessed && bmi < bmiCutoff;
+    var bmiSevere = bmiAssessed && bmi < 18.5;
+
+    /* --- 表型 3：肌肉量减少（小腿围替代） --- */
+    var calfCutoff = (sex === 'male') ? CONFIG.sarcopenia.calfMale : CONFIG.sarcopenia.calfFemale;
+    var muscleAssessed = calf != null;
+    var muscleMet = muscleAssessed && calf < calfCutoff;
+
+    var phenotype = [
+      {
+        key: 'weightLoss',
+        label: '非自愿体重下降',
+        met: wlMet,
+        assessed: wlAssessed,
+        detail: wlDetail + (wlMet ? '；达到 ≥5% 表型标准' : (wlAssessed ? '；未达到 ≥5% 表型标准' : ''))
+      },
+      {
+        key: 'lowBmi',
+        label: '低 BMI',
+        met: bmiMet,
+        assessed: bmiAssessed,
+        detail: bmiAssessed ? ('BMI ' + bmi + '（亚洲阈值 <' + bmiCutoff + '）') : '未提供身高/体重'
+      },
+      {
+        key: 'lowMuscle',
+        label: '肌肉量减少（小腿围替代指标）',
+        met: muscleMet,
+        assessed: muscleAssessed,
+        detail: muscleAssessed ? ('小腿围 ' + calf + ' cm（AWGS 阈值 <' + calfCutoff + ' cm）') : '未提供小腿围'
+      }
+    ];
+
+    /* --- 病因 1：进食减少 / 吸收障碍 --- */
+    var intakeMet = !!input.reducedIntake || q1 === 0 || q1 === 1;
+    var intakeAssessed = (q1 != null) || (input.reducedIntake != null);
+
+    /* --- 病因 2：疾病 / 炎症负荷 --- */
+    var diseases = input.diseases || {};
+    var diseaseNames = [];
+    if (diseases.chronic) diseaseNames.push('慢性疾病');
+    if (diseases.acute) diseaseNames.push('急性疾病/感染/手术创伤');
+    if (diseases.ckd) diseaseNames.push('慢性肾病');
+    if (diseases.dysphagia) diseaseNames.push('咀嚼/吞咽困难');
+    var diseaseMet = diseaseNames.length > 0;
+
+    var etiology = [
+      {
+        key: 'reducedIntake',
+        label: '进食减少 / 吸收障碍',
+        met: intakeMet,
+        assessed: intakeAssessed,
+        detail: intakeMet ? '存在进食量减少或消化吸收问题' : '未见明显进食减少'
+      },
+      {
+        key: 'disease',
+        label: '疾病 / 炎症负荷（不要求抽血）',
+        met: diseaseMet,
+        assessed: true,
+        detail: diseaseMet ? ('存在：' + diseaseNames.join('、')) : '未报告疾病/炎症因素'
+      }
+    ];
+
+    var phenMet = 0;
+    var phenAssessed = false;
+    for (var i = 0; i < phenotype.length; i++) {
+      if (phenotype[i].met) phenMet++;
+      if (phenotype[i].assessed) phenAssessed = true;
+    }
+    var etioMet = 0;
+    for (var j = 0; j < etiology.length; j++) {
+      if (etiology[j].met) etioMet++;
+    }
+
+    var result, label, reason, severity = null;
+    if (!phenAssessed) {
+      result = 'insufficient';
+      label = '资料不足，暂不能判定';
+      reason = '至少需要 1 项表型标准完成评估。请补充体重变化、身高体重（BMI）或小腿围。';
+    } else if (phenMet >= 1 && etioMet >= 1) {
+      result = 'positive';
+      label = '符合 GLIM 营养不良诊断标准（建议临床确认）';
+      severity = (wlSevere || bmiSevere) ? '重度' : '中度';
+      reason = '表型标准满足 ' + phenMet + ' 项，病因标准满足 ' + etioMet + ' 项，符合 GLIM 两步法。';
+    } else if (phenMet >= 1 || etioMet >= 1) {
+      result = 'risk_only';
+      label = '存在营养风险，但尚未满足 GLIM 诊断';
+      reason = '仅满足' + (phenMet >= 1 ? '表型' : '病因') + '标准，需补充另一侧证据并动态复查。';
     } else {
-      notes.push('保证优质蛋白与充足能量摄入，促进伤口愈合与康复。');
-      notes.push('食物选择易消化的软食/正常饮食，少油少盐。');
+      result = 'negative';
+      label = '未达到 GLIM 营养不良诊断标准';
+      reason = '表型与病因标准均未满足；如临床情况变化，建议复查。';
     }
-  } else {
-    notes.push('参照中国居民膳食指南 2022：食物多样，谷薯类为主。');
-    notes.push('保证足量蔬菜水果，适量奶豆坚果。');
-    notes.push('少油少盐，足量饮水（1500~1700 ml/日）。');
+
+    var obesityType = !!(bmi != null && bmi >= 24 && muscleMet && etioMet >= 1);
+
+    var missing = [];
+    if (!wlAssessed) missing.push('体重下降幅度');
+    if (!bmiAssessed) missing.push('身高/体重（BMI）');
+    if (!muscleAssessed) missing.push('小腿围（肌量替代指标）');
+
+    return {
+      phenotype: phenotype,
+      etiology: etiology,
+      result: result,
+      label: label,
+      reason: reason,
+      severity: severity,
+      obesityType: obesityType,
+      missing: missing,
+      weightLossPct: wlPct,
+      bmiCutoff: bmiCutoff,
+      caveat: '本结论为筛查与评估辅助，不替代临床诊断；小腿围为肌量筛查替代指标，确诊需结合人体成分/影像及临床评估。'
+    };
   }
-  var noteHtml = '';
-  for (var k = 0; k < notes.length; k++) noteHtml += '<li>' + notes[k] + '</li>';
-  document.getElementById('r-notes').innerHTML = noteHtml;
 
-  document.getElementById('report-wrap').style.display = 'block';
-  document.getElementById('report-wrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-// 打印报告
-document.getElementById('btn-print').addEventListener('click', function () { window.print(); });
-
-// 重新填写：清空膳食模块
-document.getElementById('btn-diet-reset').addEventListener('click', function () {
-  document.getElementById('diet-name').value = '';
-  document.getElementById('diet-age').value = '';
-  document.getElementById('diet-weight').value = '';
-  document.getElementById('diet-sex').value = 'male';
-  document.getElementById('diet-pop').value = 'normal';
-  document.getElementById('diet-texture').value = 'normal';
-  document.getElementById('diet-texture-field').style.display = 'none';
-  document.getElementById('report-wrap').style.display = 'none';
-  appState.dietParams = null;
-  appState.lastCalc = null;
-  window.scrollTo(0, 0);
-});
-
-// =========================================================
-// 模块 4 辅助：分人群测算结果 → 膳食方案
-// =========================================================
-var dietFromBtns = document.querySelectorAll('[data-diet-from]');
-for (var db = 0; db < dietFromBtns.length; db++) {
-  dietFromBtns[db].addEventListener('click', function () {
-    var from = this.getAttribute('data-diet-from');
-    var lc = appState.lastCalc;
-    if (!lc) return;
-
-    var p = { from: 'calc' };
-    if (from === 'normal') {
-      p.population = 'normal';
-      p.energy = lc.energy;
-      p.proteinLow = lc.proteinLow; p.proteinHigh = lc.proteinHigh;
-    } else if (from === 'sarc') {
-      p.population = 'sarc';
-      p.energyLo = lc.energyLo; p.energyHi = lc.energyHi;
-      p.proteinLow = lc.proteinLow; p.proteinHigh = lc.proteinHigh;
-      p.sarcRisk = lc.sarcRisk;
-    } else if (from === 'post') {
-      p.population = 'post';
-      p.energy = lc.energy;
-      p.proteinLow = lc.proteinLow; p.proteinHigh = lc.proteinHigh;
-      p.texture = lc.texture;
+  function computeStress(selected, tempC) {
+    var items = [];
+    if (selected.fever) {
+      if (tempC != null && tempC > CONFIG.energy.feverBase) {
+        var f = 1 + CONFIG.energy.feverPerDegree * (Math.min(tempC, 43) - CONFIG.energy.feverBase);
+        items.push({ label: '发热 ' + tempC + '℃', factor: f });
+      } else {
+        items.push({ label: '发热（体温未超过 37℃）', factor: 1 });
+      }
     }
-    appState.dietParams = p;
-    showModule('diet');
-  });
-}
+    if (selected.infection) items.push({ label: '感染 / 脓毒症', factor: CONFIG.energy.infection });
+    if (selected.surgery) items.push({ label: '大手术 / 创伤', factor: CONFIG.energy.surgery });
+    if (selected.burns) items.push({ label: '烧伤', factor: CONFIG.energy.burns });
+    if (selected.ards) items.push({ label: 'ARDS', factor: CONFIG.energy.ards });
+
+    var factor = 1;
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].factor > factor) factor = items[i].factor;
+    }
+    return { items: items, factor: factor };
+  }
+
+  function mifflin(sex, weightKg, heightCm, age) {
+    var s = (sex === 'male') ? 5 : -161;
+    return 10 * weightKg + 6.25 * heightCm - 5 * age + s;
+  }
+
+  function estimateTargets(opts) {
+    var pop = opts.population || 'normal';
+    var w = opts.weight;
+    var age = opts.age;
+    var sex = opts.sex || 'female';
+    var h = opts.height || 165;
+    var stressFactor = opts.stressFactor || 1;
+    var lo, hi, rec, basis;
+
+    if (pop === 'normal') {
+      var af = opts.activityFactor || 1.375;
+      rec = mifflin(sex, w, h, age) * af;
+      lo = rec * 0.95;
+      hi = rec * 1.05;
+      basis = 'Mifflin-St Jeor × 活动系数 ' + af;
+    } else {
+      lo = CONFIG.energy.lowPerKg * w * stressFactor;
+      hi = CONFIG.energy.highPerKg * w * stressFactor;
+      rec = (lo + hi) / 2;
+      basis = '25~30 kcal/kg' + (stressFactor !== 1 ? ' × 应激系数 ' + r2(stressFactor) : '');
+    }
+
+    var pRange;
+    if (pop === 'post') {
+      pRange = CONFIG.protein.post[opts.postType || 'other'];
+    } else if (opts.glimPositive || opts.sarcRisk) {
+      pRange = CONFIG.protein.sarc;
+    } else if (age == null || age >= CONFIG.elderlyAge) {
+      pRange = CONFIG.protein.elderly;
+    } else {
+      pRange = CONFIG.protein.adult;
+    }
+
+    return {
+      population: pop,
+      energyBasis: basis,
+      energyKcalLow: r0(lo),
+      energyKcalHigh: r0(hi),
+      energyKcalRecommended: r0(rec),
+      stressFactor: stressFactor,
+      stressItems: opts.stressItems || [],
+      proteinPerKgLow: pRange[0],
+      proteinPerKgHigh: pRange[1],
+      proteinGLow: r0(pRange[0] * w),
+      proteinGHigh: r0(pRange[1] * w),
+      proteinGTarget: r0((pRange[0] + pRange[1]) / 2 * w),
+      perMealProteinLow: CONFIG.protein.perMealLow,
+      perMealProteinHigh: CONFIG.protein.perMealHigh,
+      leucinePerMealLow: CONFIG.protein.leucineLow,
+      leucinePerMealHigh: CONFIG.protein.leucineHigh
+    };
+  }
+
+  /* =======================================================
+     4. 每餐蛋白与膳食方案
+     ======================================================= */
+  function foodLabel(key, servings) {
+    var f = CONFIG.foods[key];
+    if (!f) return '';
+    return f.name + ' ' + r1(f.amount * servings) + ' ' + f.unit;
+  }
+
+  function servingStep(key) {
+    var f = CONFIG.foods[key];
+    if (!f) return 0.25;
+    if (f.unit === '个' || f.unit === '片' || f.unit === '份' || f.unit === '碗') return 0.5;
+    if (f.unit === 'g' || f.unit === 'ml') return 0.1;
+    return 0.25;
+  }
+
+  function roundServings(key, servings) {
+    var step = servingStep(key);
+    return Math.max(step, Math.round(servings / step) * step);
+  }
+
+  function mealProtein(meal) {
+    var p = 0, l = 0;
+    for (var i = 0; i < meal.items.length; i++) {
+      var f = CONFIG.foods[meal.items[i].key];
+      if (!f) continue;
+      p += f.protein * meal.items[i].servings;
+      l += f.leucine * meal.items[i].servings;
+    }
+    return { protein: p, leucine: l };
+  }
+
+  function baseMealPlan(pop, texture) {
+    if (pop === 'normal') {
+      return [
+        { time: '早餐', main: true, items: [{ key: 'oats', servings: 1 }, { key: 'egg', servings: 1 }, { key: 'milk', servings: 1.25 }] },
+        { time: '上午加餐', main: false, items: [{ key: 'fruit', servings: 1 }, { key: 'nuts', servings: 0.5 }] },
+        { time: '午餐', main: true, items: [{ key: 'rice', servings: 1 }, { key: 'fish', servings: 0.75 }, { key: 'tofu', servings: 0.5 }, { key: 'veg', servings: 1 }] },
+        { time: '下午加餐', main: false, items: [{ key: 'yogurt', servings: 1 }] },
+        { time: '晚餐', main: true, items: [{ key: 'rice', servings: 1 }, { key: 'chicken', servings: 0.4 }, { key: 'tofu', servings: 0.75 }, { key: 'veg', servings: 1 }] }
+      ];
+    }
+    if (pop === 'sarc') {
+      return [
+        { time: '早餐', main: true, items: [{ key: 'oats', servings: 1 }, { key: 'egg', servings: 2 }, { key: 'milk', servings: 1.25 }, { key: 'bread', servings: 1 }] },
+        { time: '上午加餐', main: false, items: [{ key: 'yogurt', servings: 1 }, { key: 'nuts', servings: 1 }] },
+        { time: '午餐', main: true, items: [{ key: 'rice', servings: 1 }, { key: 'fish', servings: 1 }, { key: 'tofu', servings: 0.5 }, { key: 'veg', servings: 1 }] },
+        { time: '下午加餐', main: false, items: [{ key: 'fruit', servings: 1 }, { key: 'egg', servings: 1 }] },
+        { time: '晚餐', main: true, items: [{ key: 'rice', servings: 1 }, { key: 'tofu', servings: 1 }, { key: 'chicken', servings: 0.4 }, { key: 'veg', servings: 1 }] },
+        { time: '睡前加餐', main: false, items: [{ key: 'milk', servings: 1 }] }
+      ];
+    }
+    if (texture === 'liquid') {
+      return [
+        { time: '早餐', main: true, items: [{ key: 'congee', servings: 1 }, { key: 'eggCustard', servings: 1 }] },
+        { time: '上午加餐', main: false, items: [{ key: 'milk', servings: 1 }] },
+        { time: '午餐', main: true, items: [{ key: 'fishPaste', servings: 1 }, { key: 'congee', servings: 1 }] },
+        { time: '下午加餐', main: false, items: [{ key: 'soymilk', servings: 1 }] },
+        { time: '晚餐', main: true, items: [{ key: 'ricePorridge', servings: 1 }, { key: 'tofuPudding', servings: 1 }] }
+      ];
+    }
+    if (texture === 'half') {
+      return [
+        { time: '早餐', main: true, items: [{ key: 'congee', servings: 1 }, { key: 'eggCustard', servings: 1 }] },
+        { time: '上午加餐', main: false, items: [{ key: 'yogurt', servings: 1 }] },
+        { time: '午餐', main: true, items: [{ key: 'noodles', servings: 1 }, { key: 'fishPaste', servings: 1 }] },
+        { time: '下午加餐', main: false, items: [{ key: 'milk', servings: 1 }] },
+        { time: '晚餐', main: true, items: [{ key: 'ricePorridge', servings: 1 }, { key: 'tofuPudding', servings: 1 }] }
+      ];
+    }
+    return [
+      { time: '早餐', main: true, items: [{ key: 'congee', servings: 1 }, { key: 'egg', servings: 1 }, { key: 'milk', servings: 1.25 }] },
+      { time: '上午加餐', main: false, items: [{ key: 'fruit', servings: 1 }] },
+      { time: '午餐', main: true, items: [{ key: 'rice', servings: 1 }, { key: 'fish', servings: 0.75 }, { key: 'veg', servings: 1 }] },
+      { time: '下午加餐', main: false, items: [{ key: 'yogurt', servings: 1 }] },
+      { time: '晚餐', main: true, items: [{ key: 'rice', servings: 1 }, { key: 'tofu', servings: 0.75 }, { key: 'chicken', servings: 0.4 }, { key: 'veg', servings: 1 }] }
+    ];
+  }
+
+  function boostKeysFor(meal, texture) {
+    if (texture === 'liquid' || texture === 'half') {
+      if (meal.time.indexOf('早餐') >= 0) return ['eggCustard', 'soymilk'];
+      if (meal.time.indexOf('午餐') >= 0) return ['fishPaste', 'tofuPudding'];
+      if (meal.time.indexOf('晚餐') >= 0) return ['tofuPudding', 'fishPaste'];
+      return ['milk', 'soymilk'];
+    }
+    if (meal.time.indexOf('早餐') >= 0) return ['egg', 'milk'];
+    if (meal.time.indexOf('午餐') >= 0) return ['fish', 'tofu', 'chicken'];
+    if (meal.time.indexOf('晚餐') >= 0) return ['tofu', 'chicken', 'fish'];
+    return ['yogurt', 'milk', 'egg'];
+  }
+
+  function adjustMeal(meal, target, boosts) {
+    var guard = 0;
+    var cur = mealProtein(meal);
+
+    while (cur.protein < target - 2 && guard < 8) {
+      var key = boosts[guard % boosts.length];
+      var found = null;
+      for (var i = 0; i < meal.items.length; i++) {
+        if (meal.items[i].key === key) found = meal.items[i];
+      }
+      if (found) found.servings += 0.5;
+      else meal.items.push({ key: key, servings: 0.5 });
+      cur = mealProtein(meal);
+      guard++;
+    }
+
+    guard = 0;
+    var cap = Math.min(target, CONFIG.protein.perMealHigh) + 2;
+    while (cur.protein > cap && guard < 8) {
+      var idx = -1;
+      var maxP = 0;
+      for (var j = 0; j < meal.items.length; j++) {
+        var f = CONFIG.foods[meal.items[j].key];
+        var p = f.protein * meal.items[j].servings;
+        if (p > maxP && meal.items[j].servings > 0.25) {
+          maxP = p;
+          idx = j;
+        }
+      }
+      if (idx < 0) break;
+      var stepDown = servingStep(meal.items[idx].key);
+      meal.items[idx].servings = Math.max(stepDown, meal.items[idx].servings - stepDown);
+      cur = mealProtein(meal);
+      guard++;
+    }
+
+    return cur;
+  }
+
+  function buildMealPlan(pop, texture, targets) {
+    var meals = baseMealPlan(pop, texture);
+    var rawTotal = 0;
+
+    for (var i = 0; i < meals.length; i++) {
+      rawTotal += mealProtein(meals[i]).protein;
+    }
+
+    var factor = rawTotal > 0 ? targets.proteinGTarget / rawTotal : 1;
+    factor = clamp(factor, 0.6, 1.4);
+
+    for (var i2 = 0; i2 < meals.length; i2++) {
+      for (var j = 0; j < meals[i2].items.length; j++) {
+        var it = meals[i2].items[j];
+        it.servings = roundServings(it.key, it.servings * factor);
+      }
+    }
+
+    var snackReserve = 0;
+    for (var i3 = 0; i3 < meals.length; i3++) {
+      meals[i3].proteinG = mealProtein(meals[i3]).protein;
+      if (!meals[i3].main) snackReserve += meals[i3].proteinG;
+    }
+
+    var mainTarget = clamp((targets.proteinGTarget - snackReserve) / 3, 18, 30);
+
+    for (var i4 = 0; i4 < meals.length; i4++) {
+      var m = meals[i4];
+      if (m.main) {
+        adjustMeal(m, mainTarget, boostKeysFor(m, texture));
+      }
+      var cur = mealProtein(m);
+      m.proteinG = cur.protein;
+      m.leucineG = cur.leucine;
+      m.target = m.main ? mainTarget : null;
+      m.text = m.items.map(function (item) {
+        return foodLabel(item.key, item.servings);
+      }).join(' + ');
+      m.flags = [];
+      if (m.main) {
+        if (mainTarget >= 24) {
+          var lowThreshold = Math.min(CONFIG.protein.perMealLow, mainTarget) - 1;
+          if (m.proteinG < lowThreshold) m.flags.push('蛋白偏低，可加 1 个鸡蛋 / 1 杯牛奶（或等量优质蛋白）');
+          if (m.leucineG < CONFIG.protein.leucineLow - 0.1) m.flags.push('亮氨酸偏低，优先鱼、蛋、奶、瘦肉、大豆制品');
+        }
+        if (m.proteinG > CONFIG.protein.perMealHigh + 3) m.flags.push('单次蛋白偏高，可将一部分移到加餐');
+      }
+    }
+
+    var total = 0;
+    for (var i5 = 0; i5 < meals.length; i5++) total += meals[i5].proteinG;
+
+    var gap = targets.proteinGTarget - total;
+    var supplements = [];
+    if (gap > 5) {
+      supplements.push('每日可补充口服营养补充（ONS）1 瓶（约 20 g 蛋白），或增加 1 次高蛋白加餐。');
+    }
+
+    return {
+      texture: (pop === 'post') ? texture : 'normal',
+      meals: meals,
+      mealProteinTotal: total,
+      proteinGap: Math.max(0, gap),
+      supplements: supplements
+    };
+  }
+
+  /* =======================================================
+     5. 状态
+     ======================================================= */
+  var appState = {
+    mnaScore: null,
+    mnaLevel: null,
+    lastCalc: null,
+    dietParams: null,
+    assessment: null,
+    demo: false
+  };
+
+  function popName(pop) {
+    if (pop === 'sarc') return '老年人肌少症';
+    if (pop === 'post') return '术后康复';
+    return '普通人';
+  }
+
+  function row(k, v) {
+    return '<tr><th>' + escapeHtml(k) + '</th><td>' + escapeHtml(String(v)) + '</td></tr>';
+  }
+
+  function statusBadge(met, assessed) {
+    if (!assessed) return '<span class="unassessed">— 未评估</span>';
+    if (met) return '<span class="met">✓ 满足</span>';
+    return '<span class="notmet">✗ 未满足</span>';
+  }
+
+  /* =======================================================
+     6. MNA / BMI / GLIM
+     ======================================================= */
+  function updateGlimMuscleNote() {
+    var calf = num('mna-calf');
+    var sex = $('mna-sex').value;
+    var note = $('glim-muscle-note');
+    if (!note) return;
+    if (calf == null) {
+      note.textContent = '未填写小腿围：GLIM 肌肉量标准将标记为“未评估”；缺失单项不等于阴性。';
+      return;
+    }
+    var cutoff = (sex === 'male') ? CONFIG.sarcopenia.calfMale : CONFIG.sarcopenia.calfFemale;
+    note.textContent = '小腿围 ' + calf + ' cm；AWGS 2019 参考阈值：' + (sex === 'male' ? '男' : '女') +
+      ' <' + cutoff + ' cm。' + (calf < cutoff ? '当前低于阈值，作为肌量减少的筛查替代指标。' : '当前未低于阈值。');
+  }
+
+  function updateBmiEcho() {
+    var h = num('mna-height');
+    var w = num('mna-weight');
+    var age = num('mna-age');
+    var bmi = computeBMI(w, h);
+    var cat = interpretBMI(bmi, age);
+    var echo = $('mna-bmi-echo');
+
+    if (!echo) return;
+    if (bmi == null) {
+      echo.textContent = '填写身高、体重、年龄后自动计算 BMI 并给出老年解读。';
+    } else {
+      var html = 'BMI <strong>' + bmi + '</strong> kg/m² · ' + cat.label;
+      html += '（' + ((age == null || age >= CONFIG.elderlyAge) ? '老年' : '成人') + '标准）';
+      if (cat.adviceNoWeightLoss) {
+        html += '<div class="bmi-warn">老年 BMI 25–30 可能具有保护作用，不建议以减重为目标的限制性饮食。</div>';
+      } else if ((age == null || age >= CONFIG.elderlyAge) && bmi < CONFIG.bmi.elderlyLow) {
+        html += '<div class="bmi-warn">BMI 偏低，关注体重变化与肌肉量。</div>';
+      }
+      var gapNote = glimBmiGapNote(bmi, age);
+      if (gapNote) html += '<div class="bmi-warn">' + gapNote + '。</div>';
+      echo.innerHTML = html;
+    }
+
+    var mode = $('mna-bmi-mode').value;
+    var note = $('mna-q6-auto-note');
+    if (mode === 'auto') {
+      note.textContent = (bmi != null)
+        ? ('自动计算：BMI ' + bmi + ' → ' + mnaQ6Score(bmi) + ' 分。')
+        : '自动计算：请先填写身高与体重。';
+    } else if (mode === 'manual') {
+      note.textContent = '请选择 Q6 的 BMI 区间。';
+    } else {
+      var calf = num('mna-calf');
+      note.textContent = (calf != null)
+        ? ('使用小腿围 ' + calf + ' cm：' + (calf < CONFIG.mna.calfLow ? 0 : 3) + ' 分（<31 为 0 分，≥31 为 3 分）。')
+        : '请填写小腿围。';
+    }
+
+    updateGlimMuscleNote();
+  }
+
+  function readMnaAnswers() {
+    var out = {};
+    for (var i = 1; i <= 5; i++) {
+      var el = document.querySelector('input[name="q' + i + '"]:checked');
+      if (!el) return { missing: i };
+      out['q' + i] = parseInt(el.value, 10);
+    }
+    return { answers: out };
+  }
+
+  function buildWarnings(a) {
+    var out = [];
+    if (!a || !a.case) return out;
+    var age = a.case.age;
+    var bmi = a.case.bmi;
+
+    if ((age == null || age >= CONFIG.elderlyAge) && bmi != null && bmi >= 25) {
+      out.push({
+        code: 'elderly_bmi',
+        level: 'warn',
+        text: 'BMI ' + bmi + ' 处于老年超重/保护性区间。不建议以减重为目标的限制性饮食，限制性节食可能加速肌肉流失。'
+      });
+    }
+    if (a.sarcopenia && a.sarcopenia.suspectedSarcopenicObesity) {
+      out.push({
+        code: 'so',
+        level: 'warn',
+        text: 'BMI 偏高但小腿围低于 AWGS 参考阈值，提示肌少性肥胖风险；肥胖的保护作用在肌量下降时可能消失。'
+      });
+    }
+    if (a.glim && a.glim.result === 'positive') {
+      out.push({
+        code: 'glim',
+        level: 'warn',
+        text: 'GLIM 评估符合营养不良诊断标准；本结果需临床营养专业人员确认并制定治疗方案。'
+      });
+    }
+    if (a.glim && a.glim.obesityType) {
+      out.push({
+        code: 'obesity_malnutrition',
+        level: 'warn',
+        text: '肥胖型营养不良（易漏诊）：BMI 正常或偏高时仍需关注肌肉量与疾病/炎症因素。'
+      });
+    }
+    if (a.diseases && a.diseases.ckd) {
+      out.push({
+        code: 'ckd',
+        level: 'warn',
+        text: '合并慢性肾病（CKD）：蛋白质目标需由肾内科/临床营养师个体化调整；保证充足能量是低蛋白饮食安全的前提。'
+      });
+    }
+    if (a.diseases && a.diseases.dysphagia) {
+      out.push({
+        code: 'dysphagia',
+        level: 'warn',
+        text: '存在咀嚼/吞咽困难：建议进行吞咽功能评估，调整食物质地与增稠，警惕呛咳和吸入性肺炎。'
+      });
+    }
+    if (a.case.weightLossPct != null && a.case.weightLossPct >= 10) {
+      out.push({
+        code: 'wl10',
+        level: 'bad',
+        text: '近 6 个月体重下降 ≥10%，建议尽快转诊临床营养科进一步评估。'
+      });
+    }
+    if (a.case.postDays != null && a.case.postDays >= 7 &&
+        (a.case.texture === 'liquid' || a.case.texture === 'nil')) {
+      out.push({
+        code: 'post_npo',
+        level: 'warn',
+        text: '术后 ≥7 天仍为流质/禁食，建议评估口服营养补充（ONS）或转诊营养支持。'
+      });
+    }
+    return out;
+  }
+
+  function defaultMonitoring() {
+    return [
+      '每周固定时间称重并记录；1 个月内非自愿下降 >5% 需及时评估。',
+      '记录每日进食量；连续 3 天摄入不足平时的 50% 需关注。',
+      '每月复查 MNA-SF；每 1~3 个月复查小腿围、握力、步速（条件允许时）。',
+      '出现反复感染、伤口愈合差、进食明显减少、吞咽呛咳或体重持续下降，及时转诊。'
+    ];
+  }
+
+  function defaultHomeGuidance(a) {
+    var out = [];
+    var pop = a.targets ? a.targets.population : ((a.case.age == null || a.case.age >= CONFIG.elderlyAge) ? 'sarc' : 'normal');
+
+    if (pop === 'post') {
+      out.push('按当前食物质地逐步过渡，少量多餐，优先保证优质蛋白与能量。');
+      out.push('经口摄入不足时，可在医生/营养师指导下使用口服营养补充（ONS）。');
+      out.push('关注伤口愈合、体重变化和进食耐受；出现腹胀、呕吐、腹泻及时告知医护人员。');
+    } else if (pop === 'sarc') {
+      out.push('每餐优先安排鱼、蛋、奶、瘦肉、豆制品等优质蛋白，避免长时间空腹。');
+      out.push('少量多餐；两餐之间可增加酸奶、牛奶或坚果。');
+      out.push('在医生/康复人员指导下进行抗阻运动（弹力带、坐站训练），每周 2~3 次。');
+      out.push('保证饮水；必要时在医生指导下补充维生素 D。');
+    } else {
+      out.push('参照《中国居民膳食指南 2022》：食物多样，谷薯类为主，保证蔬菜水果、奶豆和适量坚果。');
+      out.push('少油少盐，足量饮水，保持规律活动。');
+    }
+
+    if ((a.case.age == null || a.case.age >= CONFIG.elderlyAge) && a.case.bmi != null && a.case.bmi >= 25) {
+      out.push('不建议自行节食减重；以维持体重和肌肉功能为目标，具体方案咨询专业人员。');
+    }
+    return out;
+  }
+
+  function createAssessmentFromCalc(opts) {
+    var bmi = computeBMI(opts.weight, opts.height);
+    var cat = interpretBMI(bmi, opts.age);
+    return {
+      schemaVersion: CONFIG.version,
+      createdAt: new Date().toISOString(),
+      demo: false,
+      case: {
+        name: opts.name || '',
+        sex: opts.sex,
+        age: opts.age,
+        setting: opts.setting || '营养测算',
+        heightCm: opts.height,
+        weightKg: opts.weight,
+        usualWeightKg: null,
+        weightLossKg: null,
+        weightLossPct: null,
+        weightLossPeriodMonths: 6,
+        bmi: bmi,
+        postType: opts.postType || null,
+        postDays: (opts.postDays != null) ? opts.postDays : null,
+        texture: opts.texture || null
+      },
+      anthropometrics: {
+        calfCm: (opts.calf != null) ? opts.calf : null,
+        gripKg: (opts.grip != null) ? opts.grip : null,
+        gaitSpeedMs: (opts.speed != null) ? opts.speed : null,
+        bmiCategory: cat,
+        dataQuality: {
+          heightValid: opts.height != null,
+          weightValid: opts.weight != null,
+          calfAvailable: opts.calf != null
+        }
+      },
+      screening: null,
+      glim: null,
+      sarcopenia: opts.sarcopenia || {
+        screened: false,
+        flags: {},
+        risk: false,
+        suspectedSarcopenicObesity: false,
+        note: '未进行肌少症筛查'
+      },
+      targets: opts.targets || null,
+      treatment: null,
+      warnings: [],
+      monitoring: defaultMonitoring(),
+      homeGuidance: [],
+      references: REFERENCES,
+      disclaimer: DISCLAIMER
+    };
+  }
+
+  function runMna() {
+    var r = readMnaAnswers();
+    if (r.missing) {
+      alert('请完成第 ' + r.missing + ' 题');
+      return;
+    }
+
+    var answers = r.answers;
+    var sex = $('mna-sex').value;
+    var age = num('mna-age');
+    var h = num('mna-height');
+    var w = num('mna-weight');
+    var usual = num('mna-usual-weight');
+    var wl = num('mna-weightloss');
+    var calf = num('mna-calf');
+
+    if (age != null && !validRange(age, 0, 120, '年龄')) return;
+    if (h != null && !validRange(h, 100, 220, '身高')) return;
+    if (w != null && !validRange(w, 20, 200, '体重')) return;
+    if (usual != null && !validRange(usual, 20, 200, '既往体重')) return;
+    if (wl != null && !validRange(wl, 0, 50, '体重下降')) return;
+    if (calf != null && !validRange(calf, 15, 60, '小腿围')) return;
+    if (usual != null && w != null && usual < w) {
+      alert('既往体重不应低于当前体重');
+      return;
+    }
+
+    var bmi = computeBMI(w, h);
+    var mode = $('mna-bmi-mode').value;
+    var q6Score;
+
+    if (mode === 'auto') {
+      if (bmi == null) {
+        alert('自动计算 BMI 需要填写身高和体重；也可改用手动选择或小腿围。');
+        return;
+      }
+      q6Score = mnaQ6Score(bmi);
+    } else if (mode === 'manual') {
+      var q6el = document.querySelector('input[name="q6"]:checked');
+      if (!q6el) {
+        alert('请选择 Q6 的 BMI 区间');
+        return;
+      }
+      q6Score = parseInt(q6el.value, 10);
+    } else {
+      if (calf == null) {
+        alert('小腿围模式需要填写小腿围');
+        return;
+      }
+      q6Score = calf < CONFIG.mna.calfLow ? 0 : 3;
+    }
+
+    answers.q6 = q6Score;
+    var total = 0;
+    for (var key in answers) {
+      if (answers.hasOwnProperty(key)) total += answers[key];
+    }
+    var info = screeningInfo(total);
+
+    var wlPct = null;
+    if (wl != null && w != null) {
+      var base = (usual != null && usual > w) ? usual : (w + wl);
+      if (base > 0) wlPct = wl / base * 100;
+    }
+
+    var cat = interpretBMI(bmi, age);
+    var sarc = deriveSarcopenia(sex, calf, null, null, bmi);
+
+    var assessment = {
+      schemaVersion: CONFIG.version,
+      createdAt: new Date().toISOString(),
+      demo: false,
+      populationLabel: '老年人',
+      case: {
+        name: $('mna-name').value.trim(),
+        sex: sex,
+        age: age,
+        setting: '养老驿站 / 社区',
+        heightCm: h,
+        weightKg: w,
+        usualWeightKg: usual,
+        weightLossKg: wl,
+        weightLossPct: wlPct,
+        weightLossPeriodMonths: 6,
+        bmi: bmi
+      },
+      anthropometrics: {
+        calfCm: calf,
+        gripKg: null,
+        gaitSpeedMs: null,
+        bmiCategory: cat,
+        dataQuality: {
+          heightValid: h != null,
+          weightValid: w != null,
+          calfAvailable: calf != null
+        }
+      },
+      screening: {
+        tool: 'MNA-SF',
+        q6Mode: mode,
+        answers: answers,
+        total: total,
+        level: info.level,
+        advice: info.advice
+      },
+      glim: null,
+      sarcopenia: sarc,
+      targets: (w != null) ? estimateTargets({
+        population: 'sarc',
+        sex: sex,
+        age: age,
+        height: h,
+        weight: w,
+        sarcRisk: sarc.risk,
+        glimPositive: false
+      }) : null,
+      treatment: null,
+      warnings: [],
+      monitoring: defaultMonitoring(),
+      homeGuidance: [],
+      references: REFERENCES,
+      disclaimer: DISCLAIMER
+    };
+
+    assessment.warnings = buildWarnings(assessment);
+    assessment.homeGuidance = defaultHomeGuidance(assessment);
+
+    appState.mnaScore = total;
+    appState.mnaLevel = info.level;
+    appState.assessment = assessment;
+    appState.demo = false;
+
+    $('mna-result-title').textContent = info.level;
+    $('mna-result-score').textContent = total;
+    $('mna-result-advice').textContent = info.advice + (bmi != null ? ' BMI ' + bmi + '（' + cat.label + '）。' : '');
+
+    var res = $('mna-result');
+    res.className = 'result ' + info.cls + ' show';
+
+    $('glim-panel').style.display = 'block';
+    $('glim-result').style.display = 'none';
+    $('glim-criteria').innerHTML = '';
+    $('glim-conclusion').innerHTML = '';
+
+    $('glim-reduced-intake').checked = (answers.q1 <= 1);
+    $('glim-disease-acute').checked = (answers.q4 === 0);
+    if (answers.q4 === 0) $('glim-disease-none').checked = false;
+    refreshCheckboxLabels();
+    updateGlimMuscleNote();
+
+    setTimeout(function () {
+      res.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 60);
+  }
+
+  function renderGlim(g) {
+    var html = '';
+    html += '<tr><th colspan="2" class="criteria-head">表型标准（至少满足 1 项）</th></tr>';
+    for (var i = 0; i < g.phenotype.length; i++) {
+      var p = g.phenotype[i];
+      html += '<tr><th>' + escapeHtml(p.label) + '</th><td>' + statusBadge(p.met, p.assessed) +
+        '<div class="criteria-detail">' + escapeHtml(p.detail) + '</div></td></tr>';
+    }
+    html += '<tr><th colspan="2" class="criteria-head">病因标准（至少满足 1 项）</th></tr>';
+    for (var j = 0; j < g.etiology.length; j++) {
+      var e = g.etiology[j];
+      html += '<tr><th>' + escapeHtml(e.label) + '</th><td>' + statusBadge(e.met, e.assessed) +
+        '<div class="criteria-detail">' + escapeHtml(e.detail) + '</div></td></tr>';
+    }
+    $('glim-criteria').innerHTML = html;
+
+    var c = $('glim-conclusion');
+    c.className = 'glim-conclusion ' + g.result;
+    var extra = '';
+    if (g.obesityType) {
+      extra += '<p><strong>肥胖型营养不良提示：</strong>BMI 正常或偏高时仍可能存在肌肉量减少与疾病/炎症因素，不能仅凭体重判断营养状况。</p>';
+    }
+    if (g.severity) {
+      extra += '<p>程度提示：<strong>' + g.severity + '</strong>（体重下降 ≥10% 或 BMI <18.5 提示重度，需临床确认）。</p>';
+    }
+    if (g.missing.length) {
+      extra += '<p class="criteria-detail">未评估/缺失资料：' + escapeHtml(g.missing.join('、')) + '。缺失单项不等同于阴性。</p>';
+    }
+    c.innerHTML = '<h4>' + escapeHtml(g.label) + '</h4><p>' + escapeHtml(g.reason) + '</p>' +
+      extra + '<p class="criteria-detail">' + escapeHtml(g.caveat) + '</p>';
+
+    $('glim-result').style.display = 'block';
+    setTimeout(function () {
+      $('glim-result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 60);
+  }
+
+  function runGlim() {
+    var a = appState.assessment;
+    if (!a || !a.screening) {
+      alert('请先完成 MNA-SF 筛查');
+      return;
+    }
+
+    var none = $('glim-disease-none').checked;
+    var diseases = {
+      chronic: !none && $('glim-disease-chronic').checked,
+      acute: !none && $('glim-disease-acute').checked,
+      ckd: !none && $('glim-disease-ckd').checked,
+      dysphagia: !none && $('glim-disease-dysphagia').checked,
+      none: none
+    };
+
+    var g = deriveGlim({
+      age: a.case.age,
+      sex: a.case.sex,
+      bmi: a.case.bmi,
+      calf: a.anthropometrics.calfCm,
+      weight: a.case.weightKg,
+      usualWeight: a.case.usualWeightKg,
+      weightLossKg: a.case.weightLossKg,
+      q1: a.screening.answers.q1,
+      q2: a.screening.answers.q2,
+      q4: a.screening.answers.q4,
+      reducedIntake: $('glim-reduced-intake').checked,
+      diseases: diseases
+    });
+
+    a.glim = g;
+    a.diseases = diseases;
+
+    if (a.case.weightKg != null) {
+      a.targets = estimateTargets({
+        population: 'sarc',
+        sex: a.case.sex,
+        age: a.case.age,
+        height: a.case.heightCm,
+        weight: a.case.weightKg,
+        sarcRisk: !!(a.sarcopenia && a.sarcopenia.risk),
+        glimPositive: (g.result === 'positive')
+      });
+    }
+    if (a.sarcopenia) {
+      a.sarcopenia.suspectedSarcopenicObesity = !!(a.case.bmi != null && a.case.bmi >= 24 && a.sarcopenia.flags.calf);
+    }
+
+    a.warnings = buildWarnings(a);
+    a.homeGuidance = defaultHomeGuidance(a);
+    appState.assessment = a;
+    renderGlim(g);
+  }
+
+  /* =======================================================
+     7. 膳食与报告
+     ======================================================= */
+  function glimTableHtml(g) {
+    if (!g) return '<p class="hint">未进行 GLIM 诊断。</p>';
+    var html = '<table class="criteria-table"><tbody>';
+    html += '<tr><th colspan="2" class="criteria-head">表型标准（至少 1 项）</th></tr>';
+    for (var i = 0; i < g.phenotype.length; i++) {
+      var p = g.phenotype[i];
+      html += '<tr><th>' + escapeHtml(p.label) + '</th><td>' + statusBadge(p.met, p.assessed) +
+        '<div class="criteria-detail">' + escapeHtml(p.detail) + '</div></td></tr>';
+    }
+    html += '<tr><th colspan="2" class="criteria-head">病因标准（至少 1 项）</th></tr>';
+    for (var j = 0; j < g.etiology.length; j++) {
+      var e = g.etiology[j];
+      html += '<tr><th>' + escapeHtml(e.label) + '</th><td>' + statusBadge(e.met, e.assessed) +
+        '<div class="criteria-detail">' + escapeHtml(e.detail) + '</div></td></tr>';
+    }
+    html += '</tbody></table>';
+    html += '<div class="glim-conclusion ' + g.result + '"><h4>' + escapeHtml(g.label) + '</h4><p>' +
+      escapeHtml(g.reason) + '</p>';
+    if (g.obesityType) {
+      html += '<p><strong>肥胖型营养不良提示：</strong>BMI 正常或偏高时仍可能存在肌肉量减少与疾病/炎症因素，不能仅凭体重判断。</p>';
+    }
+    if (g.severity) {
+      html += '<p>程度提示：<strong>' + g.severity + '</strong>。</p>';
+    }
+    if (g.missing.length) {
+      html += '<p class="criteria-detail">未评估/缺失资料：' + escapeHtml(g.missing.join('、')) + '。</p>';
+    }
+    html += '<p class="criteria-detail">' + escapeHtml(g.caveat) + '</p></div>';
+    return html;
+  }
+
+  function renderReport(a) {
+    var t = a.targets;
+
+    $('r-name').textContent = '姓名：' + (a.case.name || '—');
+    $('r-date').textContent = '日期：' + todayStr();
+    $('r-pop').textContent = '人群：' + (a.populationLabel || popName(t ? t.population : 'normal'));
+    $('r-demo-badge').style.display = a.demo ? 'inline-block' : 'none';
+
+    /* 一、基本信息 */
+    var cat = (a.anthropometrics && a.anthropometrics.bmiCategory)
+      ? a.anthropometrics.bmiCategory
+      : interpretBMI(a.case.bmi, a.case.age);
+    var caseHtml = '';
+    caseHtml += row('性别 / 年龄', (a.case.sex === 'male' ? '男' : '女') + ' / ' + (a.case.age != null ? a.case.age + ' 岁' : '—'));
+    caseHtml += row('身高', a.case.heightCm != null ? a.case.heightCm + ' cm' : '—');
+    caseHtml += row('体重', a.case.weightKg != null ? a.case.weightKg + ' kg' : '—');
+    if (a.case.usualWeightKg != null) caseHtml += row('既往体重', a.case.usualWeightKg + ' kg');
+    if (a.case.weightLossKg != null) {
+      var wlText = a.case.weightLossKg > 0
+        ? a.case.weightLossKg + ' kg' + (a.case.weightLossPct != null ? '（' + r1(a.case.weightLossPct) + '%）' : '')
+        : '无下降';
+      caseHtml += row('近 6 个月体重下降', wlText);
+    }
+    if (a.case.postDays != null) caseHtml += row('术后天数', '第 ' + a.case.postDays + ' 天');
+    if (a.case.texture) caseHtml += row('当前进食', textureName(a.case.texture));
+    var bmiCell = a.case.bmi != null ? a.case.bmi + ' kg/m²（' + cat.label + '）' : '—';
+    var bmiGap = a.case.bmi != null ? glimBmiGapNote(a.case.bmi, a.case.age) : '';
+    if (bmiGap) bmiCell += '；' + bmiGap;
+    caseHtml += row('BMI', bmiCell);
+    if (a.anthropometrics && a.anthropometrics.calfCm != null) {
+      caseHtml += row('小腿围', a.anthropometrics.calfCm + ' cm');
+    }
+    caseHtml += row('评估场景', a.case.setting || '—');
+    $('r-case').innerHTML = caseHtml;
+
+    /* 二、筛查 */
+    if (a.screening) {
+      var s = a.screening;
+      var sHtml = '';
+      sHtml += row('筛查工具', 'MNA-SF（满分 14 分）');
+      sHtml += row('总分 / 等级', s.total + ' / 14 分 · ' + s.level);
+      sHtml += row('Q1 进食量', s.answers.q1 + ' 分');
+      sHtml += row('Q2 体重下降', s.answers.q2 + ' 分');
+      sHtml += row('Q3 活动能力', s.answers.q3 + ' 分');
+      sHtml += row('Q4 心理压力/急性疾病', s.answers.q4 + ' 分');
+      sHtml += row('Q5 神经心理问题', s.answers.q5 + ' 分');
+      sHtml += row('Q6 BMI / 小腿围', s.answers.q6 + ' 分（' +
+        (s.q6Mode === 'auto' ? '自动计算 BMI' : (s.q6Mode === 'manual' ? '手动选择 BMI 区间' : '小腿围替代')) + '）');
+      sHtml += row('筛查建议', s.advice);
+      $('r-screening').innerHTML = sHtml;
+    } else {
+      $('r-screening').innerHTML = row('筛查', '未进行 MNA-SF 筛查（本次基于分人群营养测算）');
+    }
+
+    /* 三、GLIM */
+    $('r-glim').innerHTML = glimTableHtml(a.glim);
+
+    /* 四、肌少症 */
+    var sarc = a.sarcopenia;
+    if (sarc && sarc.screened) {
+      var sarcHtml = '<p>' + (sarc.risk
+        ? '<strong>筛查指标提示肌少症风险</strong>（小腿围为肌量替代指标，确诊需结合握力、步速及临床评估）。'
+        : '已评估指标未提示肌少症风险。') + '</p>';
+      sarcHtml += '<p>' + escapeHtml(sarc.note) + '</p>';
+      if (sarc.suspectedSarcopenicObesity) {
+        sarcHtml += '<div class="warning-box"><strong>肌少性肥胖风险：</strong>BMI 偏高但肌量替代指标偏低，肥胖的保护作用可能消失。</div>';
+      }
+      $('r-sarcopenia').innerHTML = sarcHtml;
+    } else {
+      $('r-sarcopenia').innerHTML = '<p class="hint">未进行肌少症筛查（可选补充小腿围、握力、步速）。</p>';
+    }
+
+    /* 五、目标 */
+    if (t) {
+      var tHtml = '';
+      tHtml += row('目标人群', a.populationLabel || popName(t.population));
+      tHtml += row('能量依据', t.energyBasis);
+      tHtml += row('每日能量', fmtRange(t.energyKcalLow, t.energyKcalHigh) + ' kcal（推荐约 ' + t.energyKcalRecommended + ' kcal）');
+      if (t.stressItems && t.stressItems.length) {
+        var stressParts = t.stressItems.map(function (item) {
+          return item.label + ' ×' + r2(item.factor);
+        });
+        tHtml += row('应激因素', stressParts.join('；') + '；采用最高系数 ×' + r2(t.stressFactor));
+      }
+      tHtml += row('蛋白质', t.proteinPerKgLow + '~' + t.proteinPerKgHigh + ' g/kg/d，约 ' + t.proteinGLow + '~' + t.proteinGHigh + ' g/日');
+      tHtml += row('每餐蛋白目标', t.proteinGTarget / 3 < 25
+        ? '每日总量约 ' + r0(t.proteinGTarget) + ' g，3 餐平均约 ' + r0(t.proteinGTarget / 3) + ' g/餐；因每日总量按体重计算较低，以“每餐都有优质蛋白”为原则，不强求达到 25 g'
+        : '一般建议 25~30 g/餐；亮氨酸 2.5~2.8 g/餐');
+      if (a.case.bmi != null && a.case.bmi >= 28) {
+        tHtml += row('个体化提示', 'BMI ≥28（肥胖）时，能量与蛋白质可按校正体重估算，需营养师结合肌肉量及肝肾功能个体化调整。');
+      }
+      $('r-targets').innerHTML = tHtml;
+    } else {
+      $('r-targets').innerHTML = row('营养目标', '未完成身高体重或评估，暂无法计算');
+    }
+
+    /* 六、膳食 */
+    if (a.treatment && a.treatment.meals) {
+      var plan = a.treatment;
+      var mHtml = '';
+      for (var i = 0; i < plan.meals.length; i++) {
+        var m = plan.meals[i];
+        var cls = '';
+        if (m.main) {
+          cls = (m.proteinG < Math.min(CONFIG.protein.perMealLow, m.target) - 1) ? 'low' : 'ok';
+        }
+        mHtml += '<div class="meal-item"><div class="time">' + escapeHtml(m.time) + '</div><div class="food">' +
+          escapeHtml(m.text) +
+          '<div class="meal-meta">蛋白质约 <span class="' + cls + '">' + r1(m.proteinG) + ' g</span> · 亮氨酸约 ' +
+          r1(m.leucineG) + ' g' +
+          (m.main ? (m.target < 24
+            ? '（按每日总量分配，目标约 ' + r0(m.target) + ' g）'
+            : '（参考 25~30 g / 2.5~2.8 g）') : '') + '</div>' +
+          (m.flags.length ? '<div class="meal-flag">' + escapeHtml(m.flags.join('；')) + '</div>' : '') +
+          '</div></div>';
+      }
+      $('r-meals').innerHTML = mHtml;
+      var totalText = '膳食示例蛋白质合计约 ' + r1(plan.mealProteinTotal) + ' g/日，目标约 ' +
+        (t ? t.proteinGTarget : '—') + ' g/日。';
+      if (plan.supplements && plan.supplements.length) totalText += ' ' + plan.supplements.join(' ');
+      totalText += ' 食物成分为近似值，以称重和营养标签为准。';
+      $('r-meal-total').textContent = totalText;
+    } else {
+      $('r-meals').innerHTML = '<p class="hint">尚未生成膳食方案。</p>';
+      $('r-meal-total').textContent = '';
+    }
+
+    /* 七、警示 */
+    if (a.warnings && a.warnings.length) {
+      var wHtml = '<div class="warning-box"><strong>需要关注：</strong><ul>';
+      for (var k = 0; k < a.warnings.length; k++) {
+        wHtml += '<li>' + escapeHtml(a.warnings[k].text) + '</li>';
+      }
+      wHtml += '</ul></div>';
+      $('r-warnings').innerHTML = wHtml;
+    } else {
+      $('r-warnings').innerHTML = '<p class="hint">暂无特殊警示，保持动态观察。</p>';
+    }
+
+    /* 八~十 */
+    $('r-monitoring').innerHTML = (a.monitoring || defaultMonitoring()).map(function (x) {
+      return '<li>' + escapeHtml(x) + '</li>';
+    }).join('');
+    $('r-home').innerHTML = (a.homeGuidance || defaultHomeGuidance(a)).map(function (x) {
+      return '<li>' + escapeHtml(x) + '</li>';
+    }).join('');
+    $('r-refs').innerHTML = (a.references || REFERENCES).map(function (x) {
+      return '<li>' + escapeHtml(x) + '</li>';
+    }).join('');
+
+    $('r-disclaimer').innerHTML = '<div class="disclaimer">' + escapeHtml(DISCLAIMER) + '</div>';
+    $('r-sign').innerHTML = '<p>评估人：__________　复核人：__________　日期：__________</p>';
+
+    $('report-wrap').style.display = 'block';
+    setTimeout(function () {
+      $('report-wrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 60);
+  }
+
+  function applyDietParams() {
+    var ref = $('diet-ref');
+    var a = appState.assessment;
+    var p = appState.dietParams;
+
+    if (!a && !p) {
+      ref.style.display = 'none';
+      return;
+    }
+
+    var pop = 'sarc';
+    if (a && a.targets) pop = a.targets.population;
+    else if (p && p.population) pop = p.population;
+
+    $('diet-pop').value = pop;
+    $('diet-texture-field').style.display = (pop === 'post') ? 'block' : 'none';
+
+    if (a && a.case) {
+      if (a.case.name) $('diet-name').value = a.case.name;
+      if (a.case.sex) $('diet-sex').value = a.case.sex;
+      if (a.case.age != null) $('diet-age').value = a.case.age;
+      if (a.case.weightKg != null) $('diet-weight').value = a.case.weightKg;
+      if (a.case.heightCm != null) $('diet-height').value = a.case.heightCm;
+      if (a.case.texture && a.case.texture !== 'nil') $('diet-texture').value = a.case.texture;
+    }
+
+    var html = '<h4 style="margin-bottom:6px;">已带入的评估参数</h4>';
+    if (a && a.screening) {
+      html += '<p>MNA-SF：<strong>' + a.screening.total + ' / 14</strong>（' + escapeHtml(a.screening.level) + '）';
+      if (a.glim) html += '；GLIM：<strong>' + escapeHtml(a.glim.label) + '</strong>';
+      html += '。</p>';
+    }
+    if (a && a.targets) {
+      html += '<p>能量：<strong>' + fmtRange(a.targets.energyKcalLow, a.targets.energyKcalHigh) +
+        ' kcal/日</strong>；蛋白质：<strong>' + a.targets.proteinGLow + '~' + a.targets.proteinGHigh +
+        ' g/日</strong>。</p>';
+    }
+    html += '<p>可直接生成报告，也可手动调整人群与进食情况。</p>';
+    ref.innerHTML = html;
+    ref.style.display = 'block';
+  }
+
+  function onGenerateDiet() {
+    var pop = $('diet-pop').value;
+    var name = $('diet-name').value.trim();
+    var sex = $('diet-sex').value;
+    var age = num('diet-age');
+    var w = num('diet-weight');
+    var h = num('diet-height');
+    var texture = $('diet-texture').value || 'normal';
+
+    if (age == null || w == null) {
+      alert('请填写年龄和体重');
+      return;
+    }
+    if (!validRange(age, 0, 120, '年龄') || !validRange(w, 20, 200, '体重')) return;
+    if (h != null && !validRange(h, 100, 220, '身高')) return;
+
+    var a = appState.assessment;
+    if (!a) {
+      a = createAssessmentFromCalc({
+        name: name,
+        sex: sex,
+        age: age,
+        height: h,
+        weight: w,
+        setting: '膳食方案'
+      });
+      appState.assessment = a;
+    }
+
+    var oldWeight = a.case.weightKg;
+    var oldAge = a.case.age;
+    var oldSex = a.case.sex;
+
+    a.case.name = name || a.case.name || '';
+    a.case.sex = sex;
+    a.case.age = age;
+    a.case.weightKg = w;
+    if (h != null) a.case.heightCm = h;
+    a.case.bmi = computeBMI(w, a.case.heightCm);
+    a.anthropometrics.bmiCategory = interpretBMI(a.case.bmi, age);
+
+    var needTargets = !a.targets || a.targets.population !== pop ||
+      oldWeight !== w || oldAge !== age || oldSex !== sex;
+
+    if (needTargets) {
+      var heightForCalc = h || a.case.heightCm || 165;
+      var heightEstimated = (h == null && a.case.heightCm == null);
+      a.targets = estimateTargets({
+        population: pop,
+        sex: sex,
+        age: age,
+        height: heightForCalc,
+        weight: w,
+        postType: a.case.postType || 'other',
+        stressFactor: (a.targets && a.targets.population === 'post') ? a.targets.stressFactor : 1,
+        stressItems: (a.targets && a.targets.population === 'post') ? a.targets.stressItems : [],
+        glimPositive: !!(a.glim && a.glim.result === 'positive'),
+        sarcRisk: !!(a.sarcopenia && a.sarcopenia.risk)
+      });
+      if (heightEstimated && pop === 'normal') {
+        a.targets.energyBasis += '；身高未提供，按 165 cm 估算';
+      }
+    }
+
+    a.treatment = buildMealPlan(pop, texture, a.targets);
+    a.populationLabel = (pop === 'sarc' && a.screening) ? '老年人' : popName(pop);
+    a.warnings = buildWarnings(a);
+    a.homeGuidance = defaultHomeGuidance(a);
+    a.monitoring = defaultMonitoring();
+    if (a.demo) a.demo = true;
+
+    renderReport(a);
+    toast('报告已生成');
+  }
+
+  /* =======================================================
+     8. 演示与重置
+     ======================================================= */
+  function resetMnaState() {
+    var ids = ['mna-name', 'mna-age', 'mna-height', 'mna-weight', 'mna-usual-weight', 'mna-weightloss', 'mna-calf'];
+    for (var i = 0; i < ids.length; i++) {
+      if ($(ids[i])) $(ids[i]).value = '';
+    }
+    $('mna-sex').value = 'female';
+    $('mna-bmi-mode').value = 'auto';
+
+    var radios = document.querySelectorAll('#view-mna input[type="radio"]');
+    for (var j = 0; j < radios.length; j++) radios[j].checked = false;
+
+    var labels = document.querySelectorAll('#view-mna .q-opt label');
+    for (var k = 0; k < labels.length; k++) labels[k].classList.remove('sel');
+
+    var checks = document.querySelectorAll('#glim-panel input[type="checkbox"]');
+    for (var n = 0; n < checks.length; n++) checks[n].checked = false;
+
+    $('glim-panel').style.display = 'none';
+    $('glim-result').style.display = 'none';
+    $('glim-criteria').innerHTML = '';
+    $('glim-conclusion').innerHTML = '';
+    $('glim-conclusion').className = 'glim-conclusion';
+
+    $('mna-result').className = 'result';
+    $('mna-q6-bmi').style.display = 'none';
+    $('mna-bmi-echo').textContent = '填写身高、体重、年龄后自动计算 BMI 并给出老年解读。';
+    $('mna-q6-auto-note').textContent = '自动计算：请先填写身高与体重。';
+
+    appState.mnaScore = null;
+    appState.mnaLevel = null;
+    appState.assessment = null;
+    appState.demo = false;
+
+    $('report-wrap').style.display = 'none';
+    refreshCheckboxLabels();
+    updateGlimMuscleNote();
+  }
+
+  function hasUserData() {
+    if (appState.assessment) return true;
+    if (document.querySelector('#view-mna input[type="radio"]:checked')) return true;
+    var ids = ['mna-name', 'mna-age', 'mna-height', 'mna-weight', 'mna-usual-weight', 'mna-weightloss', 'mna-calf',
+      'n-age', 'n-height', 'n-weight', 's-age', 's-height', 's-weight', 'p-age', 'p-height', 'p-weight',
+      'diet-age', 'diet-weight'];
+    for (var i = 0; i < ids.length; i++) {
+      var el = $(ids[i]);
+      if (el && el.value.trim() !== '') return true;
+    }
+    return false;
+  }
+
+  function loadDemo(which) {
+    if (hasUserData() && !confirm('载入演示案例将覆盖当前填写内容，是否继续？')) return;
+
+    resetMnaState();
+    var c = (which === 'b') ? DEMO_B : DEMO_A;
+
+    setValue('mna-name', c.name);
+    $('mna-sex').value = c.sex;
+    setValue('mna-age', c.age);
+    setValue('mna-height', c.height);
+    setValue('mna-weight', c.weight);
+    setValue('mna-usual-weight', c.usual);
+    setValue('mna-weightloss', c.weightLoss);
+    setValue('mna-calf', c.calf);
+
+    checkRadio('q1', String(c.answers.q1));
+    checkRadio('q2', String(c.answers.q2));
+    checkRadio('q3', String(c.answers.q3));
+    checkRadio('q4', String(c.answers.q4));
+    checkRadio('q5', String(c.answers.q5));
+
+    $('mna-bmi-mode').value = 'auto';
+    $('mna-bmi-mode').dispatchEvent(new Event('change'));
+
+    setCheckbox('glim-disease-chronic', !!c.diseases.chronic);
+    setCheckbox('glim-disease-acute', !!c.diseases.acute);
+    setCheckbox('glim-disease-ckd', !!c.diseases.ckd);
+    setCheckbox('glim-disease-dysphagia', !!c.diseases.dysphagia);
+    setCheckbox('glim-disease-none', false);
+    refreshCheckboxLabels();
+
+    runMna();
+    if (!appState.assessment) return;
+    runGlim();
+
+    appState.demo = true;
+    if (appState.assessment) appState.assessment.demo = true;
+
+    $('diet-pop').value = 'sarc';
+    $('diet-texture-field').style.display = 'none';
+    setValue('diet-name', c.name);
+    $('diet-sex').value = c.sex;
+    setValue('diet-age', c.age);
+    setValue('diet-weight', c.weight);
+    setValue('diet-height', c.height);
+
+    toast('演示案例已载入：' + c.label + '。');
+    showModule('mna');
+    setTimeout(function () {
+      $('mna-result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  }
+
+  /* =======================================================
+     9. 视图切换
+     ======================================================= */
+  function showModule(id) {
+    var views = document.querySelectorAll('.view');
+    for (var i = 0; i < views.length; i++) {
+      views[i].classList.toggle('active', views[i].id === 'view-' + id);
+    }
+    var links = document.querySelectorAll('.nav-link');
+    for (var j = 0; j < links.length; j++) {
+      links[j].classList.toggle('active', links[j].getAttribute('data-view') === id);
+    }
+    var steps = document.querySelectorAll('.step-bar .step');
+    var stepMap = { mna: 0, calc: 2, diet: 3 };
+    var stepIndex = stepMap[id];
+    for (var k = 0; k < steps.length; k++) {
+      steps[k].classList.toggle('active', stepIndex != null && k === stepIndex);
+    }
+    if (id === 'diet') applyDietParams();
+    window.scrollTo(0, 0);
+  }
+
+  /* =======================================================
+     10. 事件绑定
+     ======================================================= */
+  function bind() {
+    /* 导航 */
+    var navLinks = document.querySelectorAll('.nav-link');
+    for (var i = 0; i < navLinks.length; i++) {
+      navLinks[i].addEventListener('click', function () {
+        showModule(this.getAttribute('data-view'));
+      });
+    }
+
+    /* 首页功能卡 */
+    var cards = document.querySelectorAll('[data-goto]');
+    for (var c = 0; c < cards.length; c++) {
+      (function (card) {
+        function go() { showModule(card.getAttribute('data-goto')); }
+        card.addEventListener('click', go);
+        card.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            go();
+          }
+        });
+      })(cards[c]);
+    }
+
+    /* 单选/复选高亮 */
+    document.addEventListener('change', function (e) {
+      var t = e.target;
+      if (!t) return;
+      if (t.type === 'radio') {
+        var group = document.getElementsByName(t.name);
+        for (var i = 0; i < group.length; i++) {
+          var label = group[i].closest('label');
+          if (label) label.classList.toggle('sel', group[i].checked);
+        }
+      }
+      if (t.type === 'checkbox') {
+        var l = t.closest('label');
+        if (l && l.classList.contains('check-opt')) l.classList.toggle('sel', t.checked);
+      }
+    });
+
+    /* BMI 实时计算 */
+    var bmiInputs = ['mna-height', 'mna-weight', 'mna-age', 'mna-calf'];
+    for (var b = 0; b < bmiInputs.length; b++) {
+      $(bmiInputs[b]).addEventListener('input', updateBmiEcho);
+    }
+    $('mna-sex').addEventListener('change', updateBmiEcho);
+
+    /* Q6 模式 */
+    $('mna-bmi-mode').addEventListener('change', function () {
+      var mode = this.value;
+      $('mna-q6-bmi').style.display = (mode === 'manual') ? 'block' : 'none';
+
+      if (mode === 'manual') {
+        var bmi = computeBMI(num('mna-weight'), num('mna-height'));
+        if (bmi != null) checkRadio('q6', String(mnaQ6Score(bmi)));
+      } else if (mode === 'calf') {
+        var q6Radios = document.querySelectorAll('input[name="q6"]');
+        for (var i = 0; i < q6Radios.length; i++) {
+          q6Radios[i].checked = false;
+          var l = q6Radios[i].closest('label');
+          if (l) l.classList.remove('sel');
+        }
+      }
+      updateBmiEcho();
+    });
+
+    /* MNA */
+    $('btn-mna-result').addEventListener('click', runMna);
+    $('btn-mna-reset').addEventListener('click', function () {
+      resetMnaState();
+      window.scrollTo(0, 0);
+    });
+    $('btn-mna-to-diet').addEventListener('click', function () {
+      if (!appState.assessment) {
+        alert('请先查看筛查结果');
+        return;
+      }
+      appState.dietParams = { from: 'assessment', population: 'sarc' };
+      showModule('diet');
+    });
+
+    /* GLIM */
+    $('btn-glim-open').addEventListener('click', function () {
+      $('glim-panel').style.display = 'block';
+      $('glim-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    $('btn-glim-run').addEventListener('click', runGlim);
+    $('btn-glim-to-diet').addEventListener('click', function () {
+      if (!appState.assessment || !appState.assessment.glim) {
+        alert('请先生成 GLIM 诊断结论');
+        return;
+      }
+      appState.dietParams = { from: 'assessment', population: 'sarc' };
+      showModule('diet');
+    });
+
+    /* 疾病互斥 */
+    var diseaseIds = ['glim-disease-chronic', 'glim-disease-acute', 'glim-disease-ckd', 'glim-disease-dysphagia'];
+    $('glim-disease-none').addEventListener('change', function () {
+      if (this.checked) {
+        for (var i = 0; i < diseaseIds.length; i++) $(diseaseIds[i]).checked = false;
+      }
+      refreshCheckboxLabels();
+    });
+    for (var d = 0; d < diseaseIds.length; d++) {
+      (function (id) {
+        $(id).addEventListener('change', function () {
+          if (this.checked) $('glim-disease-none').checked = false;
+          refreshCheckboxLabels();
+        });
+      })(diseaseIds[d]);
+    }
+
+    /* 应激互斥与体温 */
+    var stressIds = ['st-fever', 'st-infection', 'st-surgery', 'st-burns', 'st-ards'];
+    $('st-none').addEventListener('change', function () {
+      if (this.checked) {
+        for (var i = 0; i < stressIds.length; i++) $(stressIds[i]).checked = false;
+      }
+      refreshCheckboxLabels();
+      updateTempField();
+    });
+    for (var s = 0; s < stressIds.length; s++) {
+      (function (id) {
+        $(id).addEventListener('change', function () {
+          if (this.checked) $('st-none').checked = false;
+          refreshCheckboxLabels();
+          updateTempField();
+        });
+      })(stressIds[s]);
+    }
+
+    /* 分人群测算 */
+    var calcPops = document.querySelectorAll('input[name="calc-pop"]');
+    for (var cp = 0; cp < calcPops.length; cp++) {
+      calcPops[cp].addEventListener('change', function () {
+        var pop = this.value;
+        var forms = document.querySelectorAll('#view-calc .sub-form');
+        for (var i = 0; i < forms.length; i++) {
+          forms[i].classList.toggle('show', forms[i].id === 'form-' + pop);
+        }
+        refreshSegLabels();
+      });
+    }
+
+    document.querySelector('[data-calc="normal"]').addEventListener('click', calcNormal);
+    document.querySelector('[data-calc="sarc"]').addEventListener('click', calcSarc);
+    document.querySelector('[data-calc="post"]').addEventListener('click', calcPost);
+
+    /* 测算 → 膳食 */
+    var dietFromBtns = document.querySelectorAll('[data-diet-from]');
+    for (var f = 0; f < dietFromBtns.length; f++) {
+      dietFromBtns[f].addEventListener('click', function () {
+        if (!appState.assessment) {
+          alert('请先完成测算');
+          return;
+        }
+        var pop = appState.assessment.targets
+          ? appState.assessment.targets.population
+          : this.getAttribute('data-diet-from');
+        appState.dietParams = { from: 'assessment', population: pop };
+        showModule('diet');
+      });
+    }
+
+    /* 膳食 */
+    $('diet-pop').addEventListener('change', function () {
+      $('diet-texture-field').style.display = (this.value === 'post') ? 'block' : 'none';
+    });
+    $('btn-gen-diet').addEventListener('click', onGenerateDiet);
+    $('btn-print').addEventListener('click', function () { window.print(); });
+    $('btn-diet-reset').addEventListener('click', function () {
+      $('report-wrap').style.display = 'none';
+      $('diet-name').value = '';
+      $('diet-age').value = '';
+      $('diet-weight').value = '';
+      $('diet-height').value = '';
+      $('diet-sex').value = 'female';
+      $('diet-pop').value = 'normal';
+      $('diet-texture').value = 'normal';
+      $('diet-texture-field').style.display = 'none';
+      $('diet-ref').style.display = 'none';
+      appState.dietParams = null;
+      if (appState.assessment && !appState.assessment.screening) appState.assessment = null;
+      window.scrollTo(0, 0);
+    });
+
+    /* 演示 */
+    $('btn-demo-a').addEventListener('click', function () { loadDemo('a'); });
+    $('btn-demo-b').addEventListener('click', function () { loadDemo('b'); });
+
+    /* 初始化 */
+    refreshCheckboxLabels();
+    refreshSegLabels();
+    updateTempField();
+    updateBmiEcho();
+  }
+
+  function updateTempField() {
+    var fever = $('st-fever').checked;
+    $('p-temp-field').style.display = fever ? 'block' : 'none';
+  }
+
+  /* =======================================================
+     11. 分人群测算
+     ======================================================= */
+  function calcNormal() {
+    var sex = $('n-sex').value;
+    var age = num('n-age');
+    var h = num('n-height');
+    var w = num('n-weight');
+
+    if (age == null || h == null || w == null) {
+      alert('请填写年龄、身高和体重');
+      return;
+    }
+    if (!validRange(age, 18, 120, '年龄') || !validRange(h, 100, 220, '身高') || !validRange(w, 20, 200, '体重')) return;
+
+    var af = parseFloat($('n-activity').value) || 1.375;
+    var bmi = computeBMI(w, h);
+    var cat = interpretBMI(bmi, age);
+    var targets = estimateTargets({
+      population: 'normal', sex: sex, age: age, height: h, weight: w, activityFactor: af
+    });
+
+    $('n-energy').textContent = targets.energyKcalRecommended + ' kcal';
+    $('n-protein').textContent = targets.proteinGLow + '~' + targets.proteinGHigh + ' g';
+    $('n-bmi').textContent = bmi + '（' + cat.label + '）';
+    $('n-note').textContent = '能量按 Mifflin-St Jeor × 活动系数 ' + af +
+      ' 估算；蛋白质按 0.8~1.0 g/kg/d。BMI 采用中国成人标准。';
+
+    var a = createAssessmentFromCalc({
+      sex: sex, age: age, height: h, weight: w,
+      setting: '分人群测算 · 普通人', targets: targets
+    });
+    a.warnings = buildWarnings(a);
+    a.homeGuidance = defaultHomeGuidance(a);
+    appState.assessment = a;
+    appState.demo = false;
+    appState.lastCalc = {
+      population: 'normal', sex: sex, age: age, weight: w, height: h,
+      energy: targets.energyKcalRecommended, proteinLow: targets.proteinGLow, proteinHigh: targets.proteinGHigh
+    };
+
+    var res = $('res-normal');
+    res.classList.add('show');
+    res.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function calcSarc() {
+    var sex = $('s-sex').value;
+    var age = num('s-age');
+    var h = num('s-height');
+    var w = num('s-weight');
+    var calf = num('s-calf');
+    var grip = num('s-grip');
+    var speed = num('s-speed');
+
+    if (age == null || w == null) {
+      alert('请填写年龄和体重');
+      return;
+    }
+    if (!validRange(age, 18, 120, '年龄') || !validRange(w, 20, 200, '体重')) return;
+    if (h != null && !validRange(h, 100, 220, '身高')) return;
+    if (calf != null && !validRange(calf, 15, 60, '小腿围')) return;
+    if (grip != null && !validRange(grip, 0, 80, '握力')) return;
+    if (speed != null && !validRange(speed, 0, 5, '步速')) return;
+
+    var bmi = computeBMI(w, h);
+    var cat = interpretBMI(bmi, age);
+    var sarc = deriveSarcopenia(sex, calf, grip, speed, bmi);
+    var targets = estimateTargets({
+      population: 'sarc', sex: sex, age: age, height: h, weight: w, sarcRisk: sarc.risk
+    });
+
+    var riskText = '小腿围、握力、步速均未提供，暂无法判断肌少症风险。';
+    if (sarc.screened) {
+      riskText = sarc.risk
+        ? '提示肌少症风险：' + sarc.note + '。建议进一步评估肌肉量与躯体功能。'
+        : '已评估指标未提示肌少症风险：' + sarc.note + '。';
+    }
+    if (sarc.suspectedSarcopenicObesity) {
+      riskText += ' BMI 偏高但肌量替代指标偏低，提示肌少性肥胖风险。';
+    }
+
+    $('s-risk').textContent = riskText;
+    $('s-energy').textContent = fmtRange(targets.energyKcalLow, targets.energyKcalHigh) + ' kcal';
+    $('s-protein').textContent = targets.proteinGLow + '~' + targets.proteinGHigh + ' g';
+    $('s-bmi').textContent = bmi != null ? bmi + '（' + cat.label + '）' : '—';
+    $('s-note').textContent = '能量按 25~30 kcal/kg/d 估算；蛋白质按 1.2~1.5 g/kg/d。小腿围为肌量筛查替代指标，确诊需结合人体成分或影像。';
+
+    var a = createAssessmentFromCalc({
+      sex: sex, age: age, height: h, weight: w, calf: calf, grip: grip, speed: speed,
+      setting: '分人群测算 · 老年人肌少症', targets: targets, sarcopenia: sarc
+    });
+    a.warnings = buildWarnings(a);
+    a.homeGuidance = defaultHomeGuidance(a);
+    appState.assessment = a;
+    appState.demo = false;
+    appState.lastCalc = {
+      population: 'sarc', sex: sex, age: age, weight: w, height: h,
+      energyLow: targets.energyKcalLow, energyHigh: targets.energyKcalHigh,
+      proteinLow: targets.proteinGLow, proteinHigh: targets.proteinGHigh
+    };
+
+    var res = $('res-sarc');
+    res.className = 'result ' + (sarc.risk ? 'warn' : 'ok') + ' show';
+    res.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function calcPost() {
+    var sex = $('p-sex').value;
+    var age = num('p-age');
+    var h = num('p-height');
+    var w = num('p-weight');
+    var days = num('p-days');
+
+    if (age == null || w == null) {
+      alert('请填写年龄和体重');
+      return;
+    }
+    if (!validRange(age, 18, 120, '年龄') || !validRange(w, 20, 200, '体重')) return;
+    if (h != null && !validRange(h, 100, 220, '身高')) return;
+    if (days != null && !validRange(days, 0, 365, '术后天数')) return;
+
+    var selected = {
+      fever: $('st-fever').checked,
+      infection: $('st-infection').checked,
+      surgery: $('st-surgery').checked,
+      burns: $('st-burns').checked,
+      ards: $('st-ards').checked
+    };
+    var temp = num('p-temp');
+    if (selected.fever) {
+      if (temp == null) {
+        alert('勾选了发热，请填写体温');
+        return;
+      }
+      if (!validRange(temp, 34, 43, '体温')) return;
+    }
+
+    var stress = computeStress(selected, temp);
+    var surgery = $('p-surgery').value;
+    var texture = $('p-diet').value;
+    var bmi = computeBMI(w, h);
+    var cat = interpretBMI(bmi, age);
+    var targets = estimateTargets({
+      population: 'post', sex: sex, age: age, height: h, weight: w,
+      postType: surgery, stressFactor: stress.factor, stressItems: stress.items
+    });
+
+    $('p-energy').textContent = fmtRange(targets.energyKcalLow, targets.energyKcalHigh) + ' kcal';
+    $('p-protein').textContent = targets.proteinGLow + '~' + targets.proteinGHigh + ' g';
+    $('p-bmi').textContent = bmi != null ? bmi + '（' + cat.label + '）' : '—';
+
+    var stressText = stress.items.length
+      ? stress.items.map(function (item) { return item.label + ' ×' + r2(item.factor); }).join('；') +
+        '；取最高系数 ×' + r2(stress.factor)
+      : '无额外应激';
+    var note = '能量按 25~30 kcal/kg/d × 应激系数估算（' + stressText + '）；蛋白质按手术类型推荐。';
+    if (days != null) note += ' 术后第 ' + days + ' 天。';
+    if (days != null && days >= 7 && (texture === 'liquid' || texture === 'nil')) {
+      note += ' 术后 ≥7 天仍为流质/禁食，建议评估 ONS 或转诊。';
+    }
+    $('p-note').textContent = note;
+
+    var a = createAssessmentFromCalc({
+      sex: sex, age: age, height: h, weight: w,
+      setting: '分人群测算 · 术后康复', targets: targets,
+      postType: surgery, postDays: days, texture: texture,
+      sarcopenia: {
+        screened: false, flags: {}, risk: false,
+        suspectedSarcopenicObesity: false, note: '术后人群未进行肌少症筛查'
+      }
+    });
+    a.warnings = buildWarnings(a);
+    a.homeGuidance = defaultHomeGuidance(a);
+    appState.assessment = a;
+    appState.demo = false;
+    appState.lastCalc = {
+      population: 'post', sex: sex, age: age, weight: w, height: h,
+      energyLow: targets.energyKcalLow, energyHigh: targets.energyKcalHigh,
+      proteinLow: targets.proteinGLow, proteinHigh: targets.proteinGHigh
+    };
+
+    var res = $('res-post');
+    res.classList.add('show');
+    res.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  /* =======================================================
+     12. 启动
+     ======================================================= */
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bind);
+  } else {
+    bind();
+  }
+})();
+
 </script>
 </body>
 </html>
